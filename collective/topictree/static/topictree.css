@@ -1,0 +1,7 @@
+.icons-on .contenttype-collective\.topictree\.topictree,
+.icons-on .contenttype-collective\.topictree\.topic {
+    background: url("++resource++collective.topictree/topic-icon.png") no-repeat 0 8px;
+    display: inline-block;
+    line-height: 2em;
+    padding-left: 20px !important;
+}

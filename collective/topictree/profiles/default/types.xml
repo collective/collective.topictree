@@ -1,0 +1,4 @@
+<object name="portal_types">
+    <object name="collective.topictree.topictree" meta_type="Dexterity FTI" />
+    <object name="collective.topictree.topic" meta_type="Dexterity FTI" />
+</object>

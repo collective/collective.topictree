@@ -1,0 +1,45 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="collective.topictree">
+
+    <!-- Include configuration for dependencies listed in setup.py -->
+    <includeDependencies package="." />
+
+    <grok:grok package="." />
+
+    <!-- Register an extension profile to make the product installable
+        in Plone -->
+    <genericsetup:registerProfile
+        name="default"
+        title="collective.topictree"
+        directory="profiles/default"
+        description="Tag content with topics in a topic tree"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
+
+    <plone:behavior
+        title="Tag content with topics"
+        description="Tag content with topics in a topic tree"
+        provides=".behavior.ITopicTags"
+        for="plone.dexterity.interfaces.IDexterityContent"
+        />
+
+    <include package="archetypes.schemaextender" />
+
+    <adapter
+        name="collective.topictree.topictagsextender"
+        for="Products.CMFCore.interfaces._content.IContentish"
+        provides="archetypes.schemaextender.interfaces.ISchemaExtender"
+        factory=".schemaextender.TopicTagsExtender"
+        />
+
+    <browser:resourceDirectory
+        name="collective.topictree"
+        directory="static"
+        />
+
+</configure>
