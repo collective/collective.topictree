@@ -27,7 +27,7 @@ setup(name='collective.topictree',
           'setuptools',
           'plone.app.dexterity',
           'plone.behavior',
-          'plone.app.referenceablebehavior",
+          'plone.app.referenceablebehavior',
           # -*- Extra requirements: -*-
       ],
       extras_require = {
