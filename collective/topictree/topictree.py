@@ -2,7 +2,7 @@ from zope import schema
 from five import grok
 from plone.directives import dexterity, form
 
-from siyavula.what import MessageFactory as _
+from collective.topictree import MessageFactory as _
 
 class ITopicTree(form.Schema):
     """ Simple container class for a topic tree.
