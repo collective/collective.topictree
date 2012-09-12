@@ -1,0 +1,30 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="plone.z3cform"
+      tal:omit-tag="">
+
+<body>
+    <metal:main fill-slot="main">
+
+    <div id="content-core">
+
+	    <div class="portalMessage"
+		tal:condition="view/status" tal:content="view/status">
+	    </div>
+	
+	    <h1> EDIT TOPIC TREE </h1>
+
+	    <form action="." method="post" id="add-question-form"
+		tal:attributes="name view/formname;
+		                action request/getURL; enctype view/enctype;
+		                class view/kssformname">
+	    </form>
+
+    </div>
+
+    </metal:main>
+</body>
+</html>

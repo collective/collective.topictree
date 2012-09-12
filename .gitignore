@@ -1,4 +1,5 @@
-*.pyc
-.~lock.*
-Paste*
-*egg-info*
+*.py[co]
+*.egg-info
+*.egg
+*.[a-z]*~
+

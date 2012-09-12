@@ -10,6 +10,7 @@
     <includeDependencies package="." />
 
     <grok:grok package="." />
+  <include package=".browser" />
 
     <!-- Register an extension profile to make the product installable
         in Plone -->
