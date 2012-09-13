@@ -11,17 +11,24 @@
 
     <div id="content-core">
 
-	    <div class="portalMessage"
-		tal:condition="view/status" tal:content="view/status">
-	    </div>
-	
-	    <h1> EDIT TOPIC TREE </h1>
+	    <div class="portalMessage" tal:condition="view/status" tal:content="view/status">
+        </div>
+
+        <h1> EDIT TOPIC TREE </h1>
 
 	    <form action="." method="post" id="add-question-form"
-		tal:attributes="name view/formname;
-		                action request/getURL; enctype view/enctype;
-		                class view/kssformname">
-	    </form>
+        tal:attributes="name view/formname;
+                        action request/getURL; enctype view/enctype;
+                        class view/kssformname">
+
+            <div class="formControls">
+                <input type="submit" value="Save" class="submit-widget button-field context"
+                       name="form.buttons.save" id="form-buttons-save">
+                <input type="submit" value="Cancel" class="submit-widget button-field standalone"
+                       name="form.buttons.cancel" id="form-buttons-cancel">
+            </div>
+
+        </form>
 
     </div>
 
