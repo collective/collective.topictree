@@ -21,6 +21,20 @@
                         action request/getURL; enctype view/enctype;
                         class view/kssformname">
 
+        <div style="height:30px; overflow:auto;" id="mmenu">
+            <input type="button" style="display:block; float:left;" value="add folder" id="add_folder">
+            <input type="button" style="display:block; float:left;" value="add file" id="add_default">
+            <input type="button" style="display:block; float:left;" value="rename" id="rename">
+            <input type="button" style="display:block; float:left;" value="remove" id="remove">
+            <input type="button" style="display:block; float:left;" value="cut" id="cut">
+            <input type="button" style="display:block; float:left;" value="copy" id="copy">
+            <input type="button" style="display:block; float:left;" value="paste" id="paste">
+        </div>
+
+        <div id="treeroot">
+        </div>
+
+
             <div class="formControls">
                 <input type="submit" value="Save" class="submit-widget button-field context"
                        name="form.buttons.save" id="form-buttons-save">
