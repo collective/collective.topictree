@@ -24,10 +24,13 @@ jq("#treeroot")
         "checkbox" : {
             "two_state" : true
            // "override_ui" : true
+        },
+        "themes" : {
+                "theme" : "default-mod",
+                "dots" : false,
+                "icons" : false
         }
 	});
-
-jq("#treeroot").jstree("set_theme","classic"); //doesnt work yet
 
     console.log("post tree debug message");
 
