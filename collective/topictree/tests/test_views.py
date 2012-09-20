@@ -34,5 +34,14 @@ class TestAddTopicView(CollectiveTopictreeTestBase):
         view = self.topictree.restrictedTraverse('@@addtopic')
         self.request.set('topic_title','anything')
         addTopic = view.addTopic()
-        self.assertEquals(addTopic,'anything')
+        self.assertTrue(ITopic.providedBy(addTopic))
+
+        
+        
+
+
+
+
+
+
 

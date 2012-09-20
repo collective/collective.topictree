@@ -7,6 +7,8 @@ from zope.interface import Interface
 from collective.topictree import MessageFactory as _
 from collective.topictree.topictree import ITopicTree
 
+from plone.dexterity.utils import createContentInContainer
+
 grok.templatedir('templates')
 
 class AddTopicView(grok.View):
@@ -25,5 +27,6 @@ class AddTopicView(grok.View):
         if not topic_title:
             return
 
-        return topic_title
+        topic = createContentInContainer(context, "collective.topictree.topictree", title=topic_title) 
+        return topic
 
