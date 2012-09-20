@@ -1,11 +1,11 @@
 from five import grok
 
-#from zope.component.hooks import getSite
+from zope.event import notify
 
+from plone.dexterity.events import EditCancelledEvent
+from plone.dexterity.events import AddCancelledEvent
 from plone.directives import dexterity
 from z3c.form import form, button
-
-#from Acquisition import aq_inner
 
 from collective.topictree import MessageFactory as _
 from collective.topictree.topictree import ITopicTree
@@ -22,5 +22,18 @@ class TopicTreeEditForm(dexterity.EditForm):
 
     formname = 'edit-topictree-form'
     kssformname = "kssattr-formname-@@edit"
+
+    # overwrite add handler because we are overwritting cancel handler,
+    # seems both are necessary for things to work
+    @button.buttonAndHandler(_('Save'), name='save')
+    def handleAdd(self, action):
+        super(TopicTreeEditForm, self).handleAdd(self,action)
+
+    # overwrite cancel handler so that StatusMessage does not get displayed
+    @button.buttonAndHandler(_(u'Cancel'), name='cancel')
+    def handleCancel(self,action):
+        # do not call IStatusMessage
+        self.request.response.redirect(self.nextURL())
+        notify(AddCancelledEvent(self.context))
 
 

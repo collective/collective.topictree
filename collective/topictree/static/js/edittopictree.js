@@ -1,5 +1,20 @@
 $(document).ready(function() {
 
+
+jq(function () {
+        $("#mmenu input").click(function () {
+            switch(this.id) {
+                case "add_topic":
+                    $("#treeroot").jstree("create", null, "last", { "attr" : { "rel" : this.id.toString().replace("add_", "") } });
+                    break;
+                default:
+                    $("#treeroot").jstree(this.id);
+                    break;
+            }
+        });
+});
+
+
 jq("#treeroot")
 	.jstree({ 
 		// List of active plugins
@@ -13,10 +28,11 @@ jq("#treeroot")
 			"initially_open" : [ "root2"  ] 
 		},
         "html_data" : {
-            "data" : "<ul><li id='root'><a href='#'>Root node</a>\
-                      <ul><li><a href='#'>Child node</a></li><li><a href='#'>Child node2</a></li></ul></li>\
-                      <li id='root2'><a href='#'>Another root node</a>\
-                      <ul><li><a href='#'>Child node</a></li></ul></li></ul>"
+            "data" : "<li id='root'><a href='#'>Root node</a></li>"
+//            "data" : "<ul><li id='root'><a href='#'>Root node</a>\
+//                      <ul><li><a href='#'>Child node</a></li><li><a href='#'>Child node2</a></li></ul></li>\
+//                      <li id='root2'><a href='#'>Another root node</a>\
+//                      <ul><li><a href='#'>Child node</a></li></ul></li></ul>"
 
         },
         "checkbox" : {
