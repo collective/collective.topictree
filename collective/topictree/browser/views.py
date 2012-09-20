@@ -27,6 +27,6 @@ class AddTopicView(grok.View):
         if not topic_title:
             return
 
-        topic = createContentInContainer(context, "collective.topictree.topictree", title=topic_title) 
+        topic = createContentInContainer(context, "collective.topictree.topic", title=topic_title) 
         return topic
 
