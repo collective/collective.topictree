@@ -28,6 +28,7 @@ setup(name='collective.topictree',
           'plone.app.dexterity',
           'plone.behavior',
           'plone.app.referenceablebehavior',
+          'collective.jstree',
           # -*- Extra requirements: -*-
       ],
       extras_require = {

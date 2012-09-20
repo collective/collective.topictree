@@ -1,7 +1,5 @@
 $(document).ready(function() {
 
-    console.log("Edit Topic Tree JS loaded");
-
 jq("#treeroot")
 	.jstree({ 
 		// List of active plugins
@@ -31,8 +29,6 @@ jq("#treeroot")
                 "icons" : false
         }
 	});
-
-    console.log("post tree debug message");
 
 });
 
