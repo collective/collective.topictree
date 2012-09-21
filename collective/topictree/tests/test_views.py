@@ -1,3 +1,4 @@
+import json
 import unittest2 as unittest
 
 from zope.component import createObject
@@ -33,8 +34,8 @@ class TestAddTopicView(CollectiveTopictreeTestBase):
     def test_addTopic(self):
         view = self.topictree.restrictedTraverse('@@addtopic')
         self.request.set('topic_title','anything')
-        addTopic = view.addTopic()
-        self.assertTrue(ITopic.providedBy(addTopic))
+        AddTopicJSON = view.__call__()
+        self.assertEqual(json.loads(AddTopicJSON)['title'],'anything')
 
         
         
