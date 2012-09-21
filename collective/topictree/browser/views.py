@@ -22,7 +22,6 @@ class AddTopicView(grok.View):
     def __call__(self):
         request = self.request
         context = self.context
-
         topic_title = request.get('topic_title', '')
         if not topic_title:
             return

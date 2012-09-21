@@ -6,9 +6,9 @@ jq(function () {
             switch(this.id) {
                 case "add_topic":
                     jq.ajax({
-                            url: "TARMII2/treeoftopicness/@@addtopic",
+                            url: "@@addtopic",
                             data: {
-                                    'test': 'testtext'
+                                    'topic_title': 'test'
                             },
                             success: createNode,
                             error: displayError,
@@ -54,13 +54,21 @@ jq("#treeroot")
 });
 
 function createNode(data, textStatus, jqXHR) {
-    jq("#treeroot").jstree("create", null, "last", { "attr" : { "rel" : this.id.toString().replace("add_", "") } });
 
-    var result = data.result;
     var title = data.title;
     var node_uid = data.node_uid;
     var path = data.path;
-    jq(this).attr('path', path);
+
+    jq("#treeroot").jstree("create",
+                           null,
+                           "last", 
+                           { "attr" : { "rel" : 
+                                        this.id.toString().replace("add_", ""),
+                                        "node_uid" : node_uid,
+                                        "path" : path
+                                      }
+                           });
+    li a 
 }
 
 function displayError(jqXHR, textStatus, errorThrown) {
