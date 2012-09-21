@@ -14,7 +14,7 @@
 	    <div class="portalMessage" tal:condition="view/status" tal:content="view/status">
         </div>
 
-        <h1> EDIT TOPIC TREE </h1>
+        <h1> Edit Topic Tree </h1>
 
 	    <form action="." method="post" id="add-question-form"
         tal:attributes="name view/formname;

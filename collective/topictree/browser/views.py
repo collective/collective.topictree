@@ -31,10 +31,10 @@ class AddTopicView(grok.View):
                                                              title=topic_title) 
 
         result = 'success'
-        return json.dumps({'result'   : result,
-                           'title'    : topic_title,
-                           'node_uid' : IUUID(topic),
-                           'path'     : topic.absolute_url()})
+        return json.dumps({ 'result'   : result,
+                            'title'    : topic_title,
+                            'node_uid' : IUUID(topic),
+                            'path'     : topic.absolute_url()})
 
     def render(self):
         """ No-op to keep grok.View happy

@@ -2,13 +2,23 @@ $(document).ready(function() {
 
 
 jq(function () {
-        $("#mmenu input").click(function () {
+        jq("#mmenu input").click(function () {
             switch(this.id) {
                 case "add_topic":
-                    $("#treeroot").jstree("create", null, "last", { "attr" : { "rel" : this.id.toString().replace("add_", "") } });
+                    jq.ajax({
+                            url: "TARMII2/treeoftopicness/@@addtopic",
+                            data: {
+                                    'test': 'testtext'
+                            },
+                            success: createNode,
+                            error: displayError,
+                            dataType: "json",
+                            context: this
+                    });
+
                     break;
                 default:
-                    $("#treeroot").jstree(this.id);
+                    jq("#treeroot").jstree(this.id);
                     break;
             }
         });
@@ -21,11 +31,8 @@ jq("#treeroot")
 		"plugins" : [ 
 			"themes","ui","crrm","contextmenu","checkbox","html_data"//,"json_data",
 		],
-		// the core plugin - not many options here
 		"core" : { 
-			// just open those two nodes up
-			// as this is an AJAX enabled tree, both will be downloaded from the server
-			"initially_open" : [ "root2"  ] 
+//			"initially_open" : [ "root2"  ] 
 		},
         "html_data" : {
             "data" : "<li id='root'><a href='#'>Root node</a></li>"
@@ -33,11 +40,9 @@ jq("#treeroot")
 //                      <ul><li><a href='#'>Child node</a></li><li><a href='#'>Child node2</a></li></ul></li>\
 //                      <li id='root2'><a href='#'>Another root node</a>\
 //                      <ul><li><a href='#'>Child node</a></li></ul></li></ul>"
-
         },
         "checkbox" : {
             "two_state" : true
-           // "override_ui" : true
         },
         "themes" : {
                 "theme" : "default-mod",
@@ -47,4 +52,20 @@ jq("#treeroot")
 	});
 
 });
+
+function createNode(data, textStatus, jqXHR) {
+    jq("#treeroot").jstree("create", null, "last", { "attr" : { "rel" : this.id.toString().replace("add_", "") } });
+
+    var result = data.result;
+    var title = data.title;
+    var node_uid = data.node_uid;
+    var path = data.path;
+    jq(this).attr('path', path);
+}
+
+function displayError(jqXHR, textStatus, errorThrown) {
+    alert(errorThrown);
+}
+
+
 
