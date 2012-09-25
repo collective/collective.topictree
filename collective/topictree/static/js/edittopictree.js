@@ -7,9 +7,6 @@ $(function () {
                 case "add_topic":
                     $.ajax({
                             url: "@@addtopic",
-//                            data: {
-//                                    'topic_title': 'test'
-//                            },
                             success: createNode,
                             error: displayError,
                             dataType: "json",
@@ -17,10 +14,24 @@ $(function () {
                     });
                     break;
                 case "rename":
+                   // start the rename action
                     $("#treeroot").jstree(this.id);
 
+                    break;
                 case "remove":
-                    $("#treeroot").jstree(this.id);
+                    var node_uid_to_delete = $('.jstree-clicked').parent()
+                                              .attr('node_uid')
+                    $.ajax({
+                          url: "@@deletetopic",
+                          data: {
+                                 'node_uid': node_uid_to_delete
+                                },
+                          success: deleteNode,
+                          error: displayError,
+                          dataType: "json",
+                          context: this
+                    });
+                    break;
 
 //                default:
 //                    $("#treeroot").jstree(this.id);
@@ -56,13 +67,28 @@ $("#treeroot")
     })
     //this fires after an item is edited in the tree
     .bind("rename.jstree", function (e, data) {
-       console.log("renamed");
+
+        // get the selected node
+        var node_uid = $('.jstree-clicked').parent().attr('node_uid')
+        var edited_title = $('.jstree-clicked').text().trim()
+
+        console.log("renamed");
+        $.ajax({
+                url: "@@edittopic",
+                data: {
+                       'topic_title': edited_title,
+                       'node_uid': node_uid
+                      },
+                success: renameNode,
+                error: displayError,
+                dataType: "json",
+                context: this
+        });
 
     })
     //this fires after an item is removed from the tree
     .bind("remove.jstree", function (e, data) {
        console.log("and its gone..");
-
     });
 
 });
@@ -77,13 +103,13 @@ function createNode(data, textStatus, jqXHR) {
                        var topic_title = $('[node_uid="' + node_uid + '"] > a')
                                           .text().trim();
                        console.log(topic_title);
+                       console.log(node_uid);
                        $.ajax({
                                url: "@@edittopic",
                                data: {
                                       'topic_title': topic_title,
                                       'node_uid': node_uid
                                },
-                               //success: createNode,
                                //error: displayError,
                                dataType: "json",
                                context: this
@@ -106,11 +132,13 @@ function createNode(data, textStatus, jqXHR) {
 
 }
 
-function renameNode(data, textStatus, jqXHR) {
-
+function deleteNode(data, textStatus, jqXHR) {
+    // delete the node from the tree ( ajax delete was successfull)
+    $("#treeroot").jstree(this.id);
 }
 
 function displayError(jqXHR, textStatus, errorThrown) {
     alert(errorThrown);
+    // XXX CHANGE THIS TO be embedded in the DOM with a message
 }
 
