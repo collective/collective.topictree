@@ -13,11 +13,13 @@ $(function () {
                             context: this
                     });
                     break;
+                // uses crrm plugin rename function
                 case "rename":
                    // start the rename action
                     $("#treeroot").jstree(this.id);
 
                     break;
+                // uses crrm plugin remove function
                 case "remove":
                     var node_uid_to_delete = $('.jstree-clicked').parent()
                                               .attr('node_uid')
@@ -32,6 +34,22 @@ $(function () {
                           context: this
                     });
                     break;
+
+                // uses crrm plugin cut function
+                case "cut":
+                    $("#treeroot").jstree(this.id);
+                    break;
+
+                // uses crrm plugin copy function
+                case "copy":
+                    $("#treeroot").jstree(this.id);
+                    break;
+
+                // uses crrm plugin paste function
+                case "paste":
+                    $("#treeroot").jstree(this.id);
+                    break;
+
 
 //                default:
 //                    $("#treeroot").jstree(this.id);
