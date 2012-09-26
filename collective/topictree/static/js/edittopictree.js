@@ -77,7 +77,8 @@ $("#treeroot")
 //                      <ul><li><a href='#'>Child node</a></li></ul></li></ul>"
 //        },
         "json_data" : {
-                "data" : [
+                    "ajax" : { "url" : "@@stateoftree" }
+/*                "data" : [
                     {
                         "data" : "A node",
                         "metadata" : { id : 23 },
@@ -91,6 +92,7 @@ $("#treeroot")
                         }
                     }
                 ]
+*/
         },
         "checkbox" : {
             "two_state" : true

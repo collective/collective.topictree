@@ -117,8 +117,25 @@ class StateOfTreeView(grok.View):
         request = self.request
         context = self.context
     
-        result = 'success'
-        return json.dumps({ 'result' : result})
+        return json.dumps(
+                    {{
+                        "data" : "from THE SERVER",
+                        "metadata" : { id : 23 },
+                        "children" : [ "Child 1", "A Child 2" ]
+                    },
+                    {
+                        "data" : "another one from THE SERVER",
+                        "metadata" : { id : 23 },
+                        "children" : [ "Child 1", "A Child 2" ]
+                    },
+                    {
+                        "attr" : { "id" : "li.node.id1" },
+                        "data" : {
+                            "title" : "Long format demo",
+                            "attr" : { "href" : "#" }
+                        }
+                    }}
+               )
 
     def render(self):
         """ No-op to keep grok.View happy
