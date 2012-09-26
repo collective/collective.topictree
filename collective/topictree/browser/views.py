@@ -118,7 +118,7 @@ class StateOfTreeView(grok.View):
         context = self.context
     
         return json.dumps(
-                    {{
+                    {
                         "data" : "from THE SERVER",
                         "metadata" : { id : 23 },
                         "children" : [ "Child 1", "A Child 2" ]
@@ -134,7 +134,7 @@ class StateOfTreeView(grok.View):
                             "title" : "Long format demo",
                             "attr" : { "href" : "#" }
                         }
-                    }}
+                    }
                )
 
     def render(self):
