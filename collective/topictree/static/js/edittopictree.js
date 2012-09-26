@@ -64,7 +64,7 @@ $("#treeroot")
 	.jstree({ 
 		// List of active plugins
 		"plugins" : [ 
-			"themes","ui","crrm","contextmenu","checkbox","json_data"//,"html_data",
+			"themes","ui","crrm","contextmenu","checkbox","json_data","types"//,"html_data",
 		],
 		"core" : { 
 //			"initially_open" : [ "root2"  ] 
@@ -99,9 +99,32 @@ $("#treeroot")
         },
         "themes" : {
                 "theme" : "default-mod",
-                "dots" : false,
-                "icons" : false
-        }
+//                "dots" : false,
+//                "icons" : false
+        },
+        "types" : {
+            // want only root nodes to be root nodes
+            // This will prevent moving or creating any other type as a root node
+            "valid_children" : [ "root" ],
+            "types" : {
+                // The default type
+                "topic" : {
+                    // can have topics inside, but NOT root nodes
+                    "valid_children" : [ "topic" ],
+                },
+                // The root nodes
+                "root" : {
+                    // can have topics inside, but NOT other root nodes
+                    "valid_children" : [ "topic" ],
+                    // those prevent the functions with the same name to be used on root nodes
+                    // internally the `before` event is used
+                    "start_drag" : false,
+                    "move_node" : false,
+                    "delete_node" : false,
+                    "remove" : false
+                }
+            }
+        },
     })
     //this fires after an item is edited in the tree
     .bind("rename.jstree", function (e, data) {
