@@ -16,7 +16,7 @@ $(function () {
                 // uses crrm plugin rename function
                 case "rename":
                    // start the rename action
-                    $("#treeroot").jstree(this.id);
+                    $("#treeroot").jstree("rename");
 
                     break;
                 // uses crrm plugin remove function
@@ -37,17 +37,17 @@ $(function () {
 
                 // uses crrm plugin cut function
                 case "cut":
-                    $("#treeroot").jstree(this.id);
+                    $("#treeroot").jstree("cut");
                     break;
 
                 // uses crrm plugin copy function
                 case "copy":
-                    $("#treeroot").jstree(this.id);
+                    $("#treeroot").jstree("copy");
                     break;
 
                 // uses crrm plugin paste function
                 case "paste":
-                    $("#treeroot").jstree(this.id);
+                    $("#treeroot").jstree("paste");
                     break;
 
 
@@ -138,7 +138,7 @@ function createNode(data, textStatus, jqXHR) {
 
                   })
                   .jstree("create",
-                           null,
+                           -1,
                            "last", 
                            { "attr" : { "rel" : 
                                         this.id.toString().replace("add_", ""),
@@ -152,7 +152,7 @@ function createNode(data, textStatus, jqXHR) {
 
 function deleteNode(data, textStatus, jqXHR) {
     // delete the node from the tree ( ajax delete was successfull)
-    $("#treeroot").jstree(this.id);
+    $("#treeroot").jstree("remove");
 }
 
 function displayError(jqXHR, textStatus, errorThrown) {
