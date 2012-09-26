@@ -1,12 +1,14 @@
 $(document).ready(function() {
 
-
 $(function () {
         $("#mmenu input").click(function () {
             switch(this.id) {
                 case "add_topic":
                     $.ajax({
                             url: "@@addtopic",
+                            //data: {
+                            //      'context_node': 
+                            //},
                             success: createNode,
                             error: displayError,
                             dataType: "json",
@@ -62,7 +64,7 @@ $("#treeroot")
 	.jstree({ 
 		// List of active plugins
 		"plugins" : [ 
-			"themes","ui","crrm","contextmenu","checkbox","html_data"
+			"themes","ui","crrm","contextmenu","checkbox","json_data"//,"html_data",
 		],
 		"core" : { 
 //			"initially_open" : [ "root2"  ] 
@@ -74,6 +76,22 @@ $("#treeroot")
 //                      <li id='root2'><a href='#'>Another root node</a>\
 //                      <ul><li><a href='#'>Child node</a></li></ul></li></ul>"
 //        },
+        "json_data" : {
+                "data" : [
+                    {
+                        "data" : "A node",
+                        "metadata" : { id : 23 },
+                        "children" : [ "Child 1", "A Child 2" ]
+                    },
+                    {
+                        "attr" : { "id" : "li.node.id1" },
+                        "data" : {
+                            "title" : "Long format demo",
+                            "attr" : { "href" : "#" }
+                        }
+                    }
+                ]
+        },
         "checkbox" : {
             "two_state" : true
         },
@@ -97,7 +115,6 @@ $("#treeroot")
                        'topic_title': edited_title,
                        'node_uid': node_uid
                       },
-                success: renameNode,
                 error: displayError,
                 dataType: "json",
                 context: this
