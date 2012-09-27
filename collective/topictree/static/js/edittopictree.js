@@ -4,11 +4,15 @@ $(function () {
         $("#mmenu input").click(function () {
             switch(this.id) {
                 case "add_topic":
+                    console.log("ADDING");
+
+                    var context_node_uid = $('.jstree-clicked').parent()
+                                        .attr('node_uid')
                     $.ajax({
                             url: "@@addtopic",
-                            //data: {
-                            //      'context_node': 
-                            //},
+                            data: {
+                                  'context_node_uid': context_node_uid
+                            },
                             success: createNode,
                             error: displayError,
                             dataType: "json",
@@ -51,11 +55,6 @@ $(function () {
                 case "paste":
                     $("#treeroot").jstree("paste");
                     break;
-
-
-//                default:
-//                    $("#treeroot").jstree(this.id);
-//                    break;
             }
         });
 });
@@ -64,64 +63,42 @@ $("#treeroot")
 	.jstree({ 
 		// List of active plugins
 		"plugins" : [ 
-			"themes","ui","crrm","contextmenu","checkbox","json_data","types"//,"html_data",
+			"themes","ui","crrm","contextmenu","checkbox","json_data","types"
+            //"dnd"
 		],
 		"core" : { 
 //			"initially_open" : [ "root2"  ] 
 		},
-//        "html_data" : {
-//            "data" : "<li id='root'><a href='#'>Root node</a></li>"
-//            "data" : "<ul><li id='root'><a href='#'>Root node</a>\
-//                      <ul><li><a href='#'>Child node</a></li><li><a href='#'>Child node2</a></li></ul></li>\
-//                      <li id='root2'><a href='#'>Another root node</a>\
-//                      <ul><li><a href='#'>Child node</a></li></ul></li></ul>"
-//        },
         "json_data" : {
                     "ajax" : { "url" : "@@stateoftree" }
-/*                "data" : [
-                    {
-                        "data" : "A node",
-                        "metadata" : { id : 23 },
-                        "children" : [ "Child 1", "A Child 2" ]
-                    },
-                    {
-                        "attr" : { "id" : "li.node.id1" },
-                        "data" : {
-                            "title" : "Long format demo",
-                            "attr" : { "href" : "#" }
-                        }
-                    }
-                ]
-*/
         },
         "checkbox" : {
             "two_state" : true
         },
         "themes" : {
                 "theme" : "default-mod",
-//                "dots" : false,
-//                "icons" : false
+                "dots" : false,
+                "icons" : false
         },
         "types" : {
-            // want only root nodes to be root nodes
-            // This will prevent moving or creating any other type as a root node
+            // Want only root nodes to be root nodes
+            // This will prevent moving or creating any other type as a rootnode
             "valid_children" : [ "root" ],
             "types" : {
-                // The default type
                 "topic" : {
                     // can have topics inside, but NOT root nodes
                     "valid_children" : [ "topic" ],
                 },
-                // The root nodes
                 "root" : {
                     // can have topics inside, but NOT other root nodes
                     "valid_children" : [ "topic" ],
-                    // those prevent the functions with the same name to be used on root nodes
-                    // internally the `before` event is used
+                    // those prevent the functions with the same name to be used
+                    // on root nodes internally the `before` event is used
                     "start_drag" : false,
                     "move_node" : false,
                     "delete_node" : false,
-                    "remove" : false
+                    "remove" : false,
+                    "rename_node" : false
                 }
             }
         },
@@ -180,7 +157,7 @@ function createNode(data, textStatus, jqXHR) {
 
                   })
                   .jstree("create",
-                           -1,
+                           null,
                            "last", 
                            { "attr" : { "rel" : 
                                         this.id.toString().replace("add_", ""),
