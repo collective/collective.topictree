@@ -145,6 +145,10 @@ class StateOfTreeView(grok.View):
 
         # this 'child 1' has two of its own children.
         { "data" : "I have 2 children",
+          "attr" : { "node_uid" : "88888888888888888888",
+                     "rel" : "topic",
+                     "path" : "http://fakepath.com",
+                   },
           "children" : [ "Child 1", "A Child 2" ] },
 
          "A Child 2" ] },

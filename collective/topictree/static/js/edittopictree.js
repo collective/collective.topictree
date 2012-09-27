@@ -63,7 +63,7 @@ $("#treeroot")
 	.jstree({ 
 		// List of active plugins
 		"plugins" : [ 
-			"themes","ui","crrm","contextmenu","checkbox","json_data","types"
+			"themes","ui","crrm","contextmenu","json_data","types"//,"checkbox"
             //"dnd"
 		],
 		"core" : { 
@@ -72,13 +72,13 @@ $("#treeroot")
         "json_data" : {
                     "ajax" : { "url" : "@@stateoftree" }
         },
-        "checkbox" : {
-            "two_state" : true
-        },
+//        "checkbox" : {
+//            "two_state" : true
+//        },
         "themes" : {
                 "theme" : "default-mod",
                 "dots" : false,
-                "icons" : false
+//                "icons" : false
         },
         "types" : {
             // Want only root nodes to be root nodes
