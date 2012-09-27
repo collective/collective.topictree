@@ -63,18 +63,19 @@ $("#treeroot")
 	.jstree({ 
 		// List of active plugins
 		"plugins" : [ 
-			"themes","ui","crrm","contextmenu","json_data","types"//,"checkbox"
-            //"dnd"
+			"themes","ui","crrm","contextmenu","json_data","types"//"dnd"
 		],
-		"core" : { 
-//			"initially_open" : [ "root2"  ] 
-		},
         "json_data" : {
-                    "ajax" : { "url" : "@@stateoftree" }
+                    "ajax" : { "url" : "@@stateoftree",
+                               "success" : function (e) { 
+                               //always select the root node when tree is loaded
+                               console.log("LOAD SUCCESS");
+                               // XXX THIS IS NOT having an effect - why?
+                               $('[rel="root"] > a').addClass("jstree-clicked");
+                               console.log("LOAD SUCCESS 2");
+                               }
+                             },
         },
-//        "checkbox" : {
-//            "two_state" : true
-//        },
         "themes" : {
                 "theme" : "default-mod",
                 "dots" : false,

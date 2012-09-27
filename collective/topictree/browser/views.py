@@ -27,25 +27,19 @@ class AddTopicView(grok.View):
         request = self.request
         context = self.context
 
-# commented out as other parts of system not yet ready for adding in context
+        context_node_uid = request.get('context_node_uid', '')
+        if not context_node_uid:
+            return 'UNDEFINED'
 
-#        context_node_uid = request.get('context_node_uid', '')
-#        if not context_node_uid:
-#            return 'UNDEFINED'
+        # find the context object
+        catalog = getToolByName(context, 'portal_catalog')
+        brains = catalog(UID=context_node_uid)
 
-#        # find the context object
-#        catalog = getToolByName(context, 'portal_catalog')
-#        brains = catalog(portal_type='collective.topictree.topic',
-#                         UID=context_node_uid)
-#        obj = brains[0].getObject()        
-
-#        topic = createContentInContainer(obj,
-#                                         "collective.topictree.topic",
-#                                         title='New Topic') 
-
-        topic = createContentInContainer(context,
+        obj = brains[0].getObject()        
+        topic = createContentInContainer(obj,
                                          "collective.topictree.topic",
                                          title='New Topic') 
+
         result = 'success'
         return json.dumps({ 'result'   : result,
                             'node_uid' : IUUID(topic),
@@ -135,30 +129,38 @@ class StateOfTreeView(grok.View):
         context = self.context
     
         return json.dumps([
-
-        { "data" : "I am a root node",
-          "attr" : { "rel" : "root" },
-          "children" : [ "Child 1", "A Child 2" ] },
-        { "data" : "I am a more complicated root node",
-          "attr" : { "rel" : "root" },
-          "children" : [ 
-
-        # this 'child 1' has two of its own children.
-        { "data" : "I have 2 children",
-          "attr" : { "node_uid" : "88888888888888888888",
-                     "rel" : "topic",
-                     "path" : "http://fakepath.com",
-                   },
-          "children" : [ "Child 1", "A Child 2" ] },
-
-         "A Child 2" ] },
-     
-        { "data" : "A node", "metadata" : { "id" : "23" }, 
-                             "children" : [ "Child 1", "A Child 2" ] },
-        { "attr" : { "id" : "li.node.id1" },
-          "data" : { "title" : "Long format demo",
-                     "attr" : { "href" : "#" } } }
+        { "data" : self.context.title,
+          "attr" : { "rel" : "root",
+                     "node_uid" : IUUID(self.context) },
+#          "children" : [ "Child 1", "A Child 2" ] 
+},
                ])
+
+#        return json.dumps([
+
+#        { "data" : "I am a root node",
+#          "attr" : { "rel" : "root" },
+#          "children" : [ "Child 1", "A Child 2" ] },
+#        { "data" : "I am a more complicated root node",
+#          "attr" : { "rel" : "root" },
+#          "children" : [ 
+#
+#        # this 'child 1' has two of its own children.
+#        { "data" : "I have 2 children",
+#          "attr" : { "node_uid" : "88888888888888888888",
+#                     "rel" : "topic",
+#                     "path" : "http://fakepath.com",
+#                   },
+#          "children" : [ "Child 1", "A Child 2" ] },
+#
+#         "A Child 2" ] },
+#     
+#        { "data" : "A node", "metadata" : { "id" : "23" }, 
+#                             "children" : [ "Child 1", "A Child 2" ] },
+#        { "attr" : { "id" : "li.node.id1" },
+#          "data" : { "title" : "Long format demo",
+#                     "attr" : { "href" : "#" } } }
+#               ])
 
 # XXX Older examples - remove upon successfull loading state of the tree.
  
@@ -172,5 +174,9 @@ class StateOfTreeView(grok.View):
         """ No-op to keep grok.View happy
         """
         return ''
+
+
+
+
 
 
