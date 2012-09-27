@@ -27,7 +27,7 @@ class AddTopicView(grok.View):
         request = self.request
         context = self.context
 
-# commented out for as other parts of system not yet ready for adding in context
+# commented out as other parts of system not yet ready for adding in context
 
 #        context_node_uid = request.get('context_node_uid', '')
 #        if not context_node_uid:
