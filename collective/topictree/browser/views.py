@@ -39,7 +39,6 @@ class AddTopicView(grok.View):
         topic = createContentInContainer(obj,
                                          "collective.topictree.topic",
                                          title='New Topic') 
-
         result = 'success'
         return json.dumps({ 'result'   : result,
                             'node_uid' : IUUID(topic) })
@@ -48,7 +47,6 @@ class AddTopicView(grok.View):
         """ No-op to keep grok.View happy
         """
         return ''
-
 
 class EditTopicView(grok.View):
     """ Edit Topic on the topic tree
@@ -116,7 +114,6 @@ class DeleteTopicView(grok.View):
         """
         return ''
 
-
 class StateOfTreeView(grok.View):
     """ Return the JSON representation of the entire Topic Tree
     """
@@ -125,37 +122,9 @@ class StateOfTreeView(grok.View):
     grok.require('zope2.View')
 
     def __call__(self):
-        request = self.request
-        context = self.context
-    
-        # get the JSON representation of the topic tree - call TopicJSON on root
-        TreeJSON = self.TopicJSON( IUUID(self.context) )
-
-        print TreeJSON
-        return TreeJSON
-
-
-#        return json.dumps([
-#        { "data" : self.context.title, "attr" : { "node_uid" : IUUID(self.context), "rel" : "root" } }
-#          "children" : [ "Child 1", "A Child 2" ] 
-#                ])
-
-#        return json.dumps([
-#        { "data" : "I am a root node",
-#          "attr" : { "rel" : "root" },
-#          "children" : [ "Child 1", "A Child 2" ] },
-#        { "data" : "I am a more complicated root node",
-#          "attr" : { "rel" : "root" },
-#          "children" : [ 
-#
-#        # this 'child 1' has two of its own children.
-#        { "data" : "I have 2 children",
-#          "attr" : { "node_uid" : "88888888888888888888",
-#                     "rel" : "topic",
-#                   },
-#          "children" : [ "Child 1", "A Child 2" ] },
-#
-#         "A Child 2" ] },
+        # get the JSON representation of the topic tree
+        # call TopicJSON on root
+        return self.TopicJSON(IUUID(self.context))
 
     def render(self):
         """ No-op to keep grok.View happy
@@ -163,7 +132,6 @@ class StateOfTreeView(grok.View):
         return ''
 
     def TopicJSON(self,node_uid):
-
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(UID=node_uid)
         contents = brains[0].getObject().getFolderContents()
@@ -176,7 +144,6 @@ class StateOfTreeView(grok.View):
             node_rel = 'default'        
 
         Json_string = ''
-        print len(contents)
 
         if len(contents) == 0: 
             # Tree leaf
@@ -189,11 +156,12 @@ class StateOfTreeView(grok.View):
                           '", "attr" : { "node_uid" : "' + node_uid +\
                           '", "rel" : "' + node_rel +\
                           '" }, "children" : [ '
+
             for brain in contents:
                     brain_uid = brain.UID                
                     Json_string = Json_string + self.TopicJSON(brain_uid) + ', '
 
-            # remove last 3 characters " , " (not needed after last child)
+            # remove last 2 characters ", " (not needed after last child)
             Json_string = Json_string[:-2]
             # add closing brackets
             Json_string = Json_string + ' ] }'
