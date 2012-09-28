@@ -140,7 +140,7 @@ class StateOfTreeView(grok.View):
 #        return json.dumps([
 #        { "data" : self.context.title, "attr" : { "node_uid" : IUUID(self.context), "rel" : "root" } }
 #          "children" : [ "Child 1", "A Child 2" ] 
-                ])
+#                ])
 
 #        return json.dumps([
 
@@ -151,7 +151,6 @@ class StateOfTreeView(grok.View):
 #          "attr" : { "rel" : "root" },
 #          "children" : [ 
 #
-
 #        # this 'child 1' has two of its own children.
 #        { "data" : "I have 2 children",
 #          "attr" : { "node_uid" : "88888888888888888888",
