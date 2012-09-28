@@ -132,10 +132,8 @@ class StateOfTreeView(grok.View):
         TreeJSON = self.TopicJSON( IUUID(self.context) )
 
         print TreeJSON
-        return json.dumps([TreeJSON])
+        return TreeJSON
 
-        test = { "data" : self.context.title, "attr" : { "node_uid" : IUUID(self.context), "rel" : "root" } }
-        return json.dumps([test])
 
 #        return json.dumps([
 #        { "data" : self.context.title, "attr" : { "node_uid" : IUUID(self.context), "rel" : "root" } }
@@ -143,7 +141,6 @@ class StateOfTreeView(grok.View):
 #                ])
 
 #        return json.dumps([
-
 #        { "data" : "I am a root node",
 #          "attr" : { "rel" : "root" },
 #          "children" : [ "Child 1", "A Child 2" ] },
@@ -159,21 +156,6 @@ class StateOfTreeView(grok.View):
 #          "children" : [ "Child 1", "A Child 2" ] },
 #
 #         "A Child 2" ] },
-#     
-#        { "data" : "A node", "metadata" : { "id" : "23" }, 
-#                             "children" : [ "Child 1", "A Child 2" ] },
-#        { "attr" : { "id" : "li.node.id1" },
-#          "data" : { "title" : "Long format demo",
-#                     "attr" : { "href" : "#" } } }
-#               ])
-
-# XXX Older examples - remove upon successfull loading state of the tree.
- 
-#	{ "data" : "A node", "state" : "open" },
-#	"Ajax node",
-#	{ "data" : "A node", "children" : [ { "data" : "Only child", "state" : "open" } ], "state" : "open" },
-
-#               ])
 
     def render(self):
         """ No-op to keep grok.View happy
@@ -184,7 +166,7 @@ class StateOfTreeView(grok.View):
 
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(UID=node_uid)
-        contents = brains[0].getFolderContents()
+        contents = brains[0].getObject().getFolderContents()
         node_name = brains[0].Title
 
         # node_rel should be default unless it is a root node
@@ -194,30 +176,26 @@ class StateOfTreeView(grok.View):
             node_rel = 'default'        
 
         Json_string = ''
+        print len(contents)
 
         if len(contents) == 0: 
             # Tree leaf
             Json_string = '{ "data" : "' + node_name +\
                           '", "attr" : { "node_uid" : "' + node_uid +\
-                          '" , "rel" : "' + node_rel + '" } }'
+                          '", "rel" : "' + node_rel + '" } }'
         else:
             # Non Tree leaf
-            print 'NOT YET IMPLEMENTED'      
-#            Json_string = '{ "data" : "' + node_name +\
-#                          '", "attr" : { "node_uid" : "' + node_uid +\
-#                          '" , "rel" : "' + node_rel +\
-#                          '" }, children : ['
+            Json_string = '{ "data" : "' + node_name +\
+                          '", "attr" : { "node_uid" : "' + node_uid +\
+                          '", "rel" : "' + node_rel +\
+                          '" }, "children" : [ '
+            for brain in contents:
+                    brain_uid = brain.UID                
+                    Json_string = Json_string + self.TopicJSON(brain_uid) + ', '
 
-        #            for each object in the container
-        #                get its node_uid
-        #                Json_string = Json_string + TopicJSON(node_uid) + ' ,'
-        #            end
-            
-#            remove the last , from the string
-#            Json_string = Json_string + ' ] }'
+            # remove last 3 characters " , " (not needed after last child)
+            Json_string = Json_string[:-2]
+            # add closing brackets
+            Json_string = Json_string + ' ] }'
 
-#        import pdb; pdb.set_trace()
-
-#        Json_string = 'nothing yet'
         return Json_string
-
