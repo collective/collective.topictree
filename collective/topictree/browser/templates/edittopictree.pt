@@ -33,11 +33,6 @@
         <div id="treeroot">
         </div>
 
-            <div class="formControls">
-                <input type="submit" value="Continue" class="submit-widget button-field standalone"
-                       name="form.buttons.cancel" id="form-buttons-cancel">
-            </div>
-
         </form>
 
     </div>

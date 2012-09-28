@@ -70,15 +70,7 @@ $("#treeroot")
 			"themes","ui","crrm","contextmenu","json_data","types"//"dnd"
 		],
         "json_data" : {
-                    "ajax" : { "url" : "@@stateoftree",
-                               "success" : function (e) { 
-                               //always select the root node when tree is loaded
-                               console.log("LOAD SUCCESS");
-                               // XXX THIS IS NOT having an effect - why?
-                               $('[rel="root"] > a').addClass("jstree-clicked");
-                               console.log("LOAD SUCCESS 2");
-                               }
-                             },
+                    "ajax" : { "url" : "@@stateoftree" },
         },
         "themes" : {
                 "theme" : "default-mod",
