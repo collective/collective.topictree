@@ -116,6 +116,7 @@ class DeleteTopicView(grok.View):
         """
         return ''
 
+
 class StateOfTreeView(grok.View):
     """ Return the JSON representation of the entire Topic Tree
     """
@@ -127,13 +128,19 @@ class StateOfTreeView(grok.View):
         request = self.request
         context = self.context
     
-        return json.dumps([
-        { "data" : self.context.title,
-          "attr" : { "rel" : "root",
-                     "node_uid" : IUUID(self.context) },
+        # get the JSON representation of the topic tree - call TopicJSON on root
+        TreeJSON = self.TopicJSON( IUUID(self.context) )
+
+        print TreeJSON
+        return json.dumps([TreeJSON])
+
+        test = { "data" : self.context.title, "attr" : { "node_uid" : IUUID(self.context), "rel" : "root" } }
+        return json.dumps([test])
+
+#        return json.dumps([
+#        { "data" : self.context.title, "attr" : { "node_uid" : IUUID(self.context), "rel" : "root" } }
 #          "children" : [ "Child 1", "A Child 2" ] 
-},
-               ])
+                ])
 
 #        return json.dumps([
 
@@ -144,6 +151,7 @@ class StateOfTreeView(grok.View):
 #          "attr" : { "rel" : "root" },
 #          "children" : [ 
 #
+
 #        # this 'child 1' has two of its own children.
 #        { "data" : "I have 2 children",
 #          "attr" : { "node_uid" : "88888888888888888888",
@@ -173,8 +181,44 @@ class StateOfTreeView(grok.View):
         """
         return ''
 
+    def TopicJSON(self,node_uid):
 
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brains = catalog(UID=node_uid)
+        contents = brains[0].getFolderContents()
+        node_name = brains[0].Title
 
+        # node_rel should be default unless it is a root node
+        if brains[0].portal_type == 'collective.topictree.topictree':
+            node_rel = 'root'
+        else:
+            node_rel = 'default'        
 
+        Json_string = ''
 
+        if len(contents) == 0: 
+            # Tree leaf
+            Json_string = '{ "data" : "' + node_name +\
+                          '", "attr" : { "node_uid" : "' + node_uid +\
+                          '" , "rel" : "' + node_rel + '" } }'
+        else:
+            # Non Tree leaf
+            print 'NOT YET IMPLEMENTED'      
+#            Json_string = '{ "data" : "' + node_name +\
+#                          '", "attr" : { "node_uid" : "' + node_uid +\
+#                          '" , "rel" : "' + node_rel +\
+#                          '" }, children : ['
+
+        #            for each object in the container
+        #                get its node_uid
+        #                Json_string = Json_string + TopicJSON(node_uid) + ' ,'
+        #            end
+            
+#            remove the last , from the string
+#            Json_string = Json_string + ' ] }'
+
+#        import pdb; pdb.set_trace()
+
+#        Json_string = 'nothing yet'
+        return Json_string
 
