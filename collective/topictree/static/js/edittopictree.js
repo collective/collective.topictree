@@ -130,7 +130,6 @@ $("#treeroot")
 function createNode(data, textStatus, jqXHR) {
 
     var node_uid = data.node_uid;
-    var path = data.path;
 
     $("#treeroot").bind("create.jstree", function (e, data) {
                        console.log("created a new node");
@@ -158,8 +157,7 @@ function createNode(data, textStatus, jqXHR) {
                            "last", 
                            { "attr" : { "rel" : 
                                         this.id.toString().replace("add_", ""),
-                                        "node_uid" : node_uid,
-                                        "path" : path
+                                        "node_uid" : node_uid
                                       },
                            "data" : "New node" // specify default new text
                            });

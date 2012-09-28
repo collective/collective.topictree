@@ -42,8 +42,7 @@ class AddTopicView(grok.View):
 
         result = 'success'
         return json.dumps({ 'result'   : result,
-                            'node_uid' : IUUID(topic),
-                            'path'     : topic.absolute_url()}) # XXX Keep?
+                            'node_uid' : IUUID(topic) })
 
     def render(self):
         """ No-op to keep grok.View happy
@@ -149,7 +148,6 @@ class StateOfTreeView(grok.View):
 #        { "data" : "I have 2 children",
 #          "attr" : { "node_uid" : "88888888888888888888",
 #                     "rel" : "topic",
-#                     "path" : "http://fakepath.com",
 #                   },
 #          "children" : [ "Child 1", "A Child 2" ] },
 #
