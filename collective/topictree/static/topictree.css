@@ -5,3 +5,8 @@
     line-height: 2em;
     padding-left: 20px !important;
 }
+
+#mmenu input {
+    margin: 0 2px 0 2px;
+    padding: 0 2px 0 2px;
+}
