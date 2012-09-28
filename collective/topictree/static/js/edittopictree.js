@@ -6,8 +6,13 @@ $(function () {
                 case "add_topic":
                     console.log("ADDING");
 
-                    var context_node_uid = $('.jstree-clicked').parent()
-                                        .attr('node_uid')
+                    var context_node_uid = $('.jstree-clicked').parent().attr('node_uid');
+                    if (context_node_uid) == undefined) {
+                        var treeroot = $('[rel="root"] > a');
+                        $(treeroot).click();
+                        context_node_uid = $(treeroot).parent().attr('node_uid');
+                    }
+
                     $.ajax({
                             url: "@@addtopic",
                             data: {
