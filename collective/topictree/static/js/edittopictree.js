@@ -2,16 +2,17 @@ $(document).ready(function() {
 
 $(function () {
         $("#mmenu input").click(function () {
+            var context_node_uid = $('.jstree-clicked').parent().attr('node_uid');
+            // select the root node if nothing is selected
+            if (context_node_uid == undefined) {
+                var treeroot = $('[rel="root"] > a');
+                $(treeroot).click();
+                context_node_uid = $(treeroot).parent().attr('node_uid');
+            }
+
             switch(this.id) {
                 case "add_topic":
                     console.log("ADDING");
-
-                    var context_node_uid = $('.jstree-clicked').parent().attr('node_uid');
-                    if (context_node_uid) == undefined) {
-                        var treeroot = $('[rel="root"] > a');
-                        $(treeroot).click();
-                        context_node_uid = $(treeroot).parent().attr('node_uid');
-                    }
 
                     $.ajax({
                             url: "@@addtopic",
@@ -32,12 +33,10 @@ $(function () {
                     break;
                 // uses crrm plugin remove function
                 case "remove":
-                    var node_uid_to_delete = $('.jstree-clicked').parent()
-                                              .attr('node_uid')
                     $.ajax({
                           url: "@@deletetopic",
                           data: {
-                                 'node_uid': node_uid_to_delete
+                                 'node_uid': context_node_uid
                                 },
                           success: deleteNode,
                           error: displayError,
