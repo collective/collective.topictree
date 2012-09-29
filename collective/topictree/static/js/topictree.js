@@ -47,17 +47,53 @@ $(function () {
 
                 // uses crrm plugin cut function
                 case "cut":
-                    $("#treeroot").jstree("cut");
+                    // clear cut and copy flags if any exist in the system
+                    $('[cut_node="set"]').removeAttr('cut_node')
+                    $('[copy_node="set"]').removeAttr('copy_node')
+
+                    $('.jstree-clicked').attr('cut_node', 'set');
+
+                    $("#treeroot").jstree("cut");    
                     break;
 
                 // uses crrm plugin copy function
                 case "copy":
+                    // clear cut and copy flags if any exist in the system
+                    $('[cut_node="set"]').removeAttr('cut_node')
+                    $('[copy_node="set"]').removeAttr('copy_node')
+
+                    $('.jstree-clicked').attr('copy_node', 'set');
+
                     $("#treeroot").jstree("copy");
                     break;
 
                 // uses crrm plugin paste function
                 case "paste":
-                    $("#treeroot").jstree("paste");
+                    var paste_uid = $('.jstree-clicked').parent()
+                                    .attr('node_uid')
+                    var cut_source_uid = $('[cut_node="set"]').parent()
+                                         .attr('node_uid')
+                    var copy_source_uid = $('[copy_node="set"]').parent()
+                                          .attr('node_uid')
+
+                    // paste location cannot be same as cut/copy location
+                    // if that is the case, paste does nothing.
+                    if (( cut_source_uid != paste_uid ) &&
+                       ( copy_source_uid != paste_uid )) {
+
+                        $.ajax({
+                                url: "@@pastetopic",
+                                data: {
+                                      'paste_uid' : paste_uid,
+                                      'cut_source_uid' : cut_source_uid,
+                                      'copy_source_uid' : copy_source_uid
+                                },
+                                success: pasteNode,
+                                error: displayError,
+                                dataType: "json",
+                                context: this
+                        });
+                    }
                     break;
             }
         });
@@ -67,7 +103,7 @@ $("#treeroot")
 	.jstree({ 
 		// List of active plugins
 		"plugins" : [ 
-			"themes","ui","crrm","contextmenu","json_data","types"//"dnd"
+			"themes","ui","crrm","json_data","types"//"dnd","contextmenu"
 		],
         "json_data" : {
                     "ajax" : { "url" : "@@stateoftree" },
@@ -167,6 +203,15 @@ function createNode(data, textStatus, jqXHR) {
 function deleteNode(data, textStatus, jqXHR) {
     // delete the node from the tree ( ajax delete was successfull)
     $("#treeroot").jstree("remove");
+}
+
+function pasteNode(data, textStatus, jqXHR) {
+    // paste into the tree ( ajax paste was successfull)
+    $("#treeroot").jstree("paste");
+
+    // clear the cut flag if cutting ( so that you dont paste
+    // twice when using cut )
+    $('[cut_node="set"]').removeAttr('cut_node');
 }
 
 function displayError(jqXHR, textStatus, errorThrown) {

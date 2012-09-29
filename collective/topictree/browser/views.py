@@ -167,3 +167,56 @@ class StateOfTreeView(grok.View):
             Json_string = Json_string + ' ] }'
 
         return Json_string
+
+class PasteTopicView(grok.View):
+    """ Paste a Topic (and its children) into a new place in the tree
+    """
+    grok.context(ITopicTree)
+    grok.name('pastetopic') 
+    grok.require('zope2.View')
+
+    def __call__(self):
+        request = self.request
+        context = self.context
+        catalog = getToolByName(context, 'portal_catalog')
+
+        paste_uid = request.get('paste_uid', '')
+        cut_source_uid = request.get('cut_source_uid', '')
+        copy_source_uid = request.get('copy_source_uid', '')
+
+        # if cut or copy have not been clicked yet  - return
+        if cut_source_uid == '' and copy_source_uid == '':
+            return 
+
+        # if cut node_uid has valid uid - cut was pressed
+        if cut_source_uid != '':
+            brains = catalog(UID=cut_source_uid)
+            obj = brains[0].getObject()
+            source_folder = obj.aq_parent
+            obj_id = brains[0].id
+            # cut
+            cp = source_folder.manage_cutObjects(obj_id)
+
+        # if copy node_uid has valid uid - copy was pressed
+        if copy_source_uid != '':
+            brains = catalog(UID=copy_source_uid)
+            obj = brains[0].getObject()
+            source_folder = obj.aq_parent
+            obj_id = brains[0].id
+            # copy
+            cp = source_folder.manage_copyObjects(obj_id)
+
+        # get the paste
+        brains2 = catalog(UID=paste_uid)
+        paste_folder = brains2[0].getObject()
+
+        # paste
+        paste_folder.manage_pasteObjects(cp)
+   
+        result = 'success'
+        return json.dumps({ 'result' : result})
+
+    def render(self):
+        """ No-op to keep grok.View happy
+        """
+        return ''
