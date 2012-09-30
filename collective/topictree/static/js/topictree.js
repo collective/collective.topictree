@@ -12,8 +12,6 @@ $(function () {
 
             switch(this.id) {
                 case "add_topic":
-                    console.log("ADDING");
-
                     $.ajax({
                             url: "@@addtopic",
                             data: {
@@ -143,7 +141,6 @@ $("#treeroot")
         var node_uid = $('.jstree-clicked').parent().attr('node_uid')
         var edited_title = $('.jstree-clicked').text().trim()
 
-        console.log("renamed");
         $.ajax({
                 url: "@@edittopic",
                 data: {
@@ -158,7 +155,6 @@ $("#treeroot")
     })
     //this fires after an item is removed from the tree
     .bind("remove.jstree", function (e, data) {
-       console.log("and its gone..");
     });
 
 });
