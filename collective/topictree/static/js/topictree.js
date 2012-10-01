@@ -49,9 +49,16 @@ $(function () {
                     $('[cut_node="set"]').removeAttr('cut_node')
                     $('[copy_node="set"]').removeAttr('copy_node')
 
-                    $('.jstree-clicked').attr('cut_node', 'set');
-
-                    $("#treeroot").jstree("cut");    
+                    var target = $('.jstree-clicked').parent().attr('node_uid');
+                    var root_uid = $('#treeroot > ul > li').attr('node_uid');
+                    // everything but the root can be cut.
+                    if ( target != root_uid ) {        
+                        $('.jstree-clicked').attr('cut_node', 'set');
+                        $("#treeroot").jstree("cut");    
+                    }
+                    else {
+                        console.log('CANT CUT ROOT');
+                    }
                     break;
 
                 // uses crrm plugin copy function
@@ -60,9 +67,16 @@ $(function () {
                     $('[cut_node="set"]').removeAttr('cut_node')
                     $('[copy_node="set"]').removeAttr('copy_node')
 
-                    $('.jstree-clicked').attr('copy_node', 'set');
-
-                    $("#treeroot").jstree("copy");
+                    var target = $('.jstree-clicked').parent().attr('node_uid');
+                    var root_uid = $('#treeroot > ul > li').attr('node_uid');
+                    // everything but the root can be copied.
+                    if ( target != root_uid ) {
+                        $('.jstree-clicked').attr('copy_node', 'set');
+                        $("#treeroot").jstree("copy");
+                    }
+                    else {
+                        console.log('CANT COPY ROOT');
+                    }
                     break;
 
                 // uses crrm plugin paste function
@@ -91,6 +105,9 @@ $(function () {
                                 dataType: "json",
                                 context: this
                         });
+                    }
+                    else {
+                        console.log('PASTE LOCATION - SAME AS SOURCE!');
                     }
                     break;
             }

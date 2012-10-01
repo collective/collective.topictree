@@ -188,6 +188,7 @@ class PasteTopicView(grok.View):
         if cut_source_uid == '' and copy_source_uid == '':
             return 
 
+        # client makes sure that only cut or copy are pressed at any given time.
         # if cut node_uid has valid uid - cut was pressed
         if cut_source_uid != '':
             brains = catalog(UID=cut_source_uid)
