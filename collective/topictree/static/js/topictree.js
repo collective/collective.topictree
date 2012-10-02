@@ -48,6 +48,10 @@ $(function () {
 
                 // uses crrm plugin remove function
                 case "remove":
+                    // clear cut and copy flags if any exist in the system
+                    // to prevent client side pasting of deleted node
+                    $('[cut_node="set"]').removeAttr('cut_node')
+                    $('[copy_node="set"]').removeAttr('copy_node')
 
                     var target = $('.jstree-clicked').parent().attr('node_uid');
                     var root_uid = $('#treeroot > ul > li').attr('node_uid');
@@ -119,10 +123,16 @@ $(function () {
                     var copy_source_uid = $('[copy_node="set"]').parent()
                                           .attr('node_uid')
 
+                    if (( cut_source_uid == undefined ) &&
+                       ( copy_source_uid == undefined )) {
+                        $('#errorBox')
+                        .html("Nothing to paste.")
+                        .addClass("infobox");              
+                    }
                     // paste location cannot be same as cut/copy location
                     // if that is the case, paste does nothing.
-                    if (( cut_source_uid != paste_uid ) &&
-                       ( copy_source_uid != paste_uid )) {
+                    else if  (( cut_source_uid != paste_uid ) &&
+                             ( copy_source_uid != paste_uid )) {
 
                         $.ajax({
                                 url: "@@pastetopic",
