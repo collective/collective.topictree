@@ -16,6 +16,8 @@
 
         <h1> Edit Topic Tree </h1>
 
+	    <div id="errorBox"></div>
+
 	    <form action="." method="post" id="add-question-form"
         tal:attributes="name view/formname;
                         action request/getURL; enctype view/enctype;

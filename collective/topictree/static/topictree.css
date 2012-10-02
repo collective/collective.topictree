@@ -10,3 +10,27 @@
     margin: 0 2px 0 2px;
     padding: 0 2px 0 2px;
 }
+
+.errorbox {
+    display: block;
+    color: #ff0000;
+    height: 20px;
+    width: 350px;
+    background-color: #FFFFE3;
+    border: 1px solid #999966;
+    clear: both;
+    margin: 5px 0 5px 0;
+    padding: 4px;
+}
+
+.infobox {
+    display: block;
+    color: #000000;
+    height: 20px;
+    width: 350px;
+    background-color: #FFFFE3;
+    border: 1px solid #999966;
+    clear: both;
+    margin: 5px 0 5px 0;
+    padding: 4px;
+}

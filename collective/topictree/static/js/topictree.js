@@ -10,6 +10,11 @@ $(function () {
                 context_node_uid = $(treeroot).parent().attr('node_uid');
             }
 
+            //empty errorbox of previous messages if any.
+            $('#errorBox').html("")
+            .removeClass("errorbox")
+            .removeClass("infobox");
+
             switch(this.id) {
                 case "add_topic":
                     $.ajax({
@@ -23,27 +28,49 @@ $(function () {
                             context: this
                     });
                     break;
+
                 // uses crrm plugin rename function
                 case "rename":
-                   // start the rename action
-                    $("#treeroot").jstree("rename");
 
+                    var target = $('.jstree-clicked').parent().attr('node_uid');
+                    var root_uid = $('#treeroot > ul > li').attr('node_uid');
+                    // everything but the root can be renamed.
+                    if ( target != root_uid ) {        
+                        // start the rename action
+                        $("#treeroot").jstree("rename");
+                    }
+                    else {
+                        $('#errorBox')
+                        .html("Tree root cannot be renamed here.")
+                        .addClass("errorbox");
+                    }
                     break;
+
                 // uses crrm plugin remove function
                 case "remove":
-                    $.ajax({
-                          url: "@@deletetopic",
-                          data: {
-                                 'node_uid': context_node_uid
-                                },
-                          success: deleteNode,
-                          error: displayError,
-                          dataType: "json",
-                          context: this
-                    });
+
+                    var target = $('.jstree-clicked').parent().attr('node_uid');
+                    var root_uid = $('#treeroot > ul > li').attr('node_uid');
+                    // everything but the root can be removed/deleted.
+                    if ( target != root_uid ) {        
+                        $.ajax({
+                              url: "@@deletetopic",
+                              data: {
+                                     'node_uid': context_node_uid
+                                    },
+                              success: deleteNode,
+                              error: displayError,
+                              dataType: "json",
+                              context: this
+                        });
+                    }
+                    else {
+                        $('#errorBox')
+                        .html("Tree root cannot be removed.")
+                        .addClass("errorbox");
+                    }
                     break;
 
-                // uses crrm plugin cut function
                 case "cut":
                     // clear cut and copy flags if any exist in the system
                     $('[cut_node="set"]').removeAttr('cut_node')
@@ -54,14 +81,16 @@ $(function () {
                     // everything but the root can be cut.
                     if ( target != root_uid ) {        
                         $('.jstree-clicked').attr('cut_node', 'set');
+                        // uses crrm plugin cut function
                         $("#treeroot").jstree("cut");    
                     }
                     else {
-                        console.log('CANT CUT ROOT');
+                        $('#errorBox')
+                        .html("Tree root cannot be cut.")
+                        .addClass("errorbox");
                     }
                     break;
 
-                // uses crrm plugin copy function
                 case "copy":
                     // clear cut and copy flags if any exist in the system
                     $('[cut_node="set"]').removeAttr('cut_node')
@@ -72,14 +101,16 @@ $(function () {
                     // everything but the root can be copied.
                     if ( target != root_uid ) {
                         $('.jstree-clicked').attr('copy_node', 'set');
+                        // uses crrm plugin copy function
                         $("#treeroot").jstree("copy");
                     }
                     else {
-                        console.log('CANT COPY ROOT');
+                        $('#errorBox')
+                        .html("Tree root cannot be copied.")
+                        .addClass("errorbox");
                     }
                     break;
 
-                // uses crrm plugin paste function
                 case "paste":
                     var paste_uid = $('.jstree-clicked').parent()
                                     .attr('node_uid')
@@ -107,9 +138,11 @@ $(function () {
                         });
                     }
                     else {
-                        console.log('PASTE LOCATION - SAME AS SOURCE!');
+                        $('#errorBox')
+                        .html("Paste location same as source.")
+                        .addClass("infobox");              
                     }
-                    break;
+                    break;  
             }
         });
 });
@@ -176,16 +209,11 @@ $("#treeroot")
 
 });
 
-function createNode(data, textStatus, jqXHR) {
-
+function createNode(data) {
     var node_uid = data.node_uid;
-
     $("#treeroot").bind("create.jstree", function (e, data) {
-                       console.log("created a new node");
                        var topic_title = $('[node_uid="' + node_uid + '"] > a')
                                           .text().trim();
-                       console.log(topic_title);
-                       console.log(node_uid);
                        $.ajax({
                                url: "@@edittopic",
                                data: {
@@ -199,7 +227,6 @@ function createNode(data, textStatus, jqXHR) {
                        // remove binding so this is called only once
                        // (not everytime another object is created)
                        $(this).unbind("create.jstree");
-
                   })
                   .jstree("create",
                            null,
@@ -210,25 +237,26 @@ function createNode(data, textStatus, jqXHR) {
                                       },
                            "data" : "New node" // specify default new text
                            });
-
 }
 
-function deleteNode(data, textStatus, jqXHR) {
+function deleteNode(data) {
     // delete the node from the tree ( ajax delete was successfull)
+    // uses crrm plugin remove function
     $("#treeroot").jstree("remove");
 }
 
-function pasteNode(data, textStatus, jqXHR) {
+function pasteNode(data) {
     // paste into the tree ( ajax paste was successfull)
+    // uses crrm plugin paste function
     $("#treeroot").jstree("paste");
-
     // clear the cut flag if cutting ( so that you dont paste
     // twice when using cut )
     $('[cut_node="set"]').removeAttr('cut_node');
 }
 
-function displayError(jqXHR, textStatus, errorThrown) {
-    alert(errorThrown);
-    // XXX CHANGE THIS TO be embedded in the DOM with a message
+function displayError(data) {
+    $('#errorBox')
+    .html("An error occurred.")
+    .addClass("errorbox");
 }
 
