@@ -92,11 +92,9 @@ class TestStateOfTreeView(CollectiveTopictreeTestBase):
         parent = createContentInContainer(self.topictree,
                                          "collective.topictree.topic",
                                          title='Parent')
-
         child1 = createContentInContainer(parent,
                                          "collective.topictree.topic",
                                          title='Child1')
-
         child2 = createContentInContainer(parent,
                                          "collective.topictree.topic",
                                          title='Child2')
@@ -130,11 +128,9 @@ class TestStateOfTreeView(CollectiveTopictreeTestBase):
         parent = createContentInContainer(self.topictree,
                                          "collective.topictree.topic",
                                          title='Parent')
-
         child1 = createContentInContainer(parent,
                                          "collective.topictree.topic",
                                          title='Child1')
-
         child2 = createContentInContainer(parent,
                                          "collective.topictree.topic",
                                          title='Child2')
@@ -162,4 +158,78 @@ class TestStateOfTreeView(CollectiveTopictreeTestBase):
         TopicJSON = view.TopicJSON(IUUID(self.topictree))
         self.assertEqual(TopicJSON,T_Ref)
 
+class TestPasteTopicView(CollectiveTopictreeTestBase):
+    """ Methods to test paste topic tree view """
+
+    def test_pasteTopic(self):
+        view = self.topictree.restrictedTraverse('@@pastetopic')
+
+        # no cut, no copy scenario
+        PasteTopic = view.__call__()
+        self.assertEqual(PasteTopic,None)
+
+        # cut/paste scenario
+        parent = createContentInContainer(self.topictree,
+                                         "collective.topictree.topic",
+                                         title='Parent')
+        child1 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child1')
+        child2 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child2')
+
+        child1_2 = createContentInContainer(child1,
+                                         "collective.topictree.topic",
+                                         title='Child1_2')
+
+        notify(ObjectModifiedEvent(parent))
+        notify(ObjectModifiedEvent(child1))
+        notify(ObjectModifiedEvent(child2))
+        notify(ObjectModifiedEvent(child1_2))
+
+        self.request.set('cut_source_uid',IUUID(child1_2))
+        self.request.set('paste_uid',IUUID(child2))
+        PasteTopic = view.__call__()
+        # child1_2 moved inside child2
+#        self.assertEqual(child2.getFolderContents()[0].UID,IUUID(child1_2))
+        # child1 should now not contain any children
+#        self.assertEqual(len(child1.getFolderContents()),0)
+
+        #delete the tree except for root (to clear for next test)
+        self.topictree.manage_delObjects([parent.getId()])
+        self.assertEquals(len(self.topictree.getFolderContents()),0)
+        #clear the request variable
+        self.request.set('cut_source_uid','')
+
+        # copy/paste scenario
+        parent = createContentInContainer(self.topictree,
+                                         "collective.topictree.topic",
+                                         title='Parent')
+        child1 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child1')
+        child2 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child2')
+
+        child1_2 = createContentInContainer(child1,
+                                         "collective.topictree.topic",
+                                         title='Child1_2')
+
+        notify(ObjectModifiedEvent(parent))
+        notify(ObjectModifiedEvent(child1))
+        notify(ObjectModifiedEvent(child2))
+        notify(ObjectModifiedEvent(child1_2))
+
+        self.request.set('copy_source_uid',IUUID(child1_2))
+        self.request.set('paste_uid',IUUID(child2))
+        PasteTopic = view.__call__()
+        # child1_2 copied inside child2
+        # child1 should still contain child1_2
+        self.assertEqual(child1.getFolderContents()[0].UID,IUUID(child1_2))
+        # child1_2 and its copy should match titles
+        self.assertEqual(child1_2.Title(),child2.getFolderContents()[0].Title)
+        # child1_2 and its copy should NOT match UIDs
+        self.assertNotEqual(IUUID(child1_2),child2.getFolderContents()[0].UID)
 
