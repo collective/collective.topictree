@@ -1,7 +1,12 @@
 import json
 import unittest2 as unittest
 
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.component import createObject
+
+from plone.uuid.interfaces import IUUID
+from plone.dexterity.utils import createContentInContainer
 
 from Products.CMFCore.utils import getToolByName
 
@@ -27,22 +32,55 @@ class TestContentTypes(unittest.TestCase):
         topic = createObject('collective.topictree.topic', id='topic')
         self.assertTrue(ITopic.providedBy(topic))
 
-
 class TestAddTopicView(CollectiveTopictreeTestBase):
     """ Methods to test add topic tree view """
 
     def test_addTopic(self):
         view = self.topictree.restrictedTraverse('@@addtopic')
-        self.request.set('topic_title','anything')
-        AddTopicJSON = view.__call__()
-        self.assertEqual(json.loads(AddTopicJSON)['title'],'anything')
+        AddTopic = view.__call__()
+        self.assertEqual(AddTopic,'UNDEFINED')
 
-        
-        
+        self.request.set('context_node_uid',IUUID(self.topictree))
+        AddTopic = view.__call__()
+        self.assertEquals(len(self.topictree.getFolderContents()),1)
+        created_type = self.topictree.getFolderContents()[0].portal_type       
+        self.assertEquals(created_type,'collective.topictree.topic')
+       
+class TestEditTopicView(CollectiveTopictreeTestBase):
+    """ Methods to test edit topic tree view """
 
+    def test_editTopic(self):
+        view = self.topictree.restrictedTraverse('@@edittopic')
+        EditTopic = view.__call__()
+        self.assertEqual(EditTopic,'UNDEFINED')
 
+        topic = createContentInContainer(self.topictree,
+                                         "collective.topictree.topic",
+                                         title='New Topic') 
 
+        notify(ObjectModifiedEvent(topic))
 
+        self.request.set('node_uid',IUUID(topic))
+        self.request.set('topic_title','Renamed Topic')
+        EditTopic = view.__call__()
+        self.assertEqual(topic.title,'Renamed Topic')
 
+class TestDeleteTopicView(CollectiveTopictreeTestBase):
+    """ Methods to test delete topic tree view """
+
+    def test_deleteTopic(self):
+        view = self.topictree.restrictedTraverse('@@deletetopic')
+        DeleteTopic = view.__call__()
+        self.assertEqual(DeleteTopic,'UNDEFINED')
+
+        topic = createContentInContainer(self.topictree,
+                                         "collective.topictree.topic",
+                                         title='NewTopic') 
+
+        notify(ObjectModifiedEvent(topic))
+        self.request.set('node_uid',IUUID(topic))
+        self.assertEqual(self.topictree.getFolderContents()[0].Title,'NewTopic')
+        DeleteTopic = view.__call__()
+        self.assertEqual(len(self.topictree.getFolderContents()),0)
 
 

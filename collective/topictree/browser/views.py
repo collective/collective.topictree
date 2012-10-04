@@ -61,7 +61,7 @@ class EditTopicView(grok.View):
         topic_title = request.get('topic_title', '')
         node_uid = request.get('node_uid', '')
         if not topic_title and not node_uid:
-            return
+            return 'UNDEFINED'
    
         # find the node object
         catalog = getToolByName(context, 'portal_catalog')
@@ -93,7 +93,7 @@ class DeleteTopicView(grok.View):
         context = self.context
         node_uid = request.get('node_uid', '')
         if not node_uid:
-            return
+            return 'UNDEFINED'
     
         # find the node object
         catalog = getToolByName(context, 'portal_catalog')
