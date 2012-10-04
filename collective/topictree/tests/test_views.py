@@ -83,4 +83,83 @@ class TestDeleteTopicView(CollectiveTopictreeTestBase):
         DeleteTopic = view.__call__()
         self.assertEqual(len(self.topictree.getFolderContents()),0)
 
+class TestStateOfTreeView(CollectiveTopictreeTestBase):
+    """ Methods to test state of tree view """
+
+    def test_stateOfTree(self):
+        view = self.topictree.restrictedTraverse('@@stateoftree')
+
+        parent = createContentInContainer(self.topictree,
+                                         "collective.topictree.topic",
+                                         title='Parent')
+
+        child1 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child1')
+
+        child2 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child2')
+
+        notify(ObjectModifiedEvent(parent))
+        notify(ObjectModifiedEvent(child1))
+        notify(ObjectModifiedEvent(child2))
+
+        T_Ref = '{ "data" : "", ' +\
+                  '"attr" : ' +\
+                    '{ "node_uid" : "' + IUUID(self.topictree) +'", ' +\
+                      '"rel" : "root" }, ' +\
+                      '"children" : [ { "data" : "Parent", ' +\
+                        '"attr" : { "node_uid" : "' + IUUID(parent) + '", ' +\
+                        '"rel" : "default" }, ' +\
+                        '"children" : ' +\
+                          '[ { "data" : "Child1", ' +\
+                          '"attr" : { "node_uid" : "' + IUUID(child1) + '", ' +\
+                          '"rel" : "default" } }, ' +\
+                            '{ "data" : "Child2", ' +\
+                          '"attr" : { "node_uid" : "' + IUUID(child2) + '", ' +\
+                          '"rel" : "default" } } ] ' +\
+                        '} ] }'
+
+        StateOfTree = view.__call__()
+        self.assertEqual(StateOfTree,T_Ref)
+
+    def test_TopicJSON(self):
+        view = self.topictree.restrictedTraverse('@@stateoftree')
+
+        parent = createContentInContainer(self.topictree,
+                                         "collective.topictree.topic",
+                                         title='Parent')
+
+        child1 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child1')
+
+        child2 = createContentInContainer(parent,
+                                         "collective.topictree.topic",
+                                         title='Child2')
+
+        notify(ObjectModifiedEvent(parent))
+        notify(ObjectModifiedEvent(child1))
+        notify(ObjectModifiedEvent(child2))
+
+        T_Ref = '{ "data" : "", ' +\
+                  '"attr" : ' +\
+                    '{ "node_uid" : "' + IUUID(self.topictree) +'", ' +\
+                      '"rel" : "root" }, ' +\
+                      '"children" : [ { "data" : "Parent", ' +\
+                        '"attr" : { "node_uid" : "' + IUUID(parent) + '", ' +\
+                        '"rel" : "default" }, ' +\
+                        '"children" : ' +\
+                          '[ { "data" : "Child1", ' +\
+                          '"attr" : { "node_uid" : "' + IUUID(child1) + '", ' +\
+                          '"rel" : "default" } }, ' +\
+                            '{ "data" : "Child2", ' +\
+                          '"attr" : { "node_uid" : "' + IUUID(child2) + '", ' +\
+                          '"rel" : "default" } } ] ' +\
+                        '} ] }'
+
+        TopicJSON = view.TopicJSON(IUUID(self.topictree))
+        self.assertEqual(TopicJSON,T_Ref)
+
 
