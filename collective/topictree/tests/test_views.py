@@ -1,4 +1,5 @@
 import json
+import transaction
 import unittest2 as unittest
 
 from zope.event import notify
@@ -188,13 +189,15 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
         notify(ObjectModifiedEvent(child2))
         notify(ObjectModifiedEvent(child1_2))
 
+        transaction.savepoint(optimistic=True)
+
         self.request.set('cut_source_uid',IUUID(child1_2))
         self.request.set('paste_uid',IUUID(child2))
         PasteTopic = view.__call__()
         # child1_2 moved inside child2
-#        self.assertEqual(child2.getFolderContents()[0].UID,IUUID(child1_2))
+        self.assertEqual(child2.getFolderContents()[0].UID,IUUID(child1_2))
         # child1 should now not contain any children
-#        self.assertEqual(len(child1.getFolderContents()),0)
+        self.assertEqual(len(child1.getFolderContents()),0)
 
         #delete the tree except for root (to clear for next test)
         self.topictree.manage_delObjects([parent.getId()])
