@@ -84,11 +84,11 @@ class TestDeleteTopicView(CollectiveTopictreeTestBase):
         DeleteTopic = view.__call__()
         self.assertEqual(len(self.topictree.getFolderContents()),0)
 
-class TestStateOfTreeView(CollectiveTopictreeTestBase):
-    """ Methods to test state of tree view """
+class TestTreeDataView(CollectiveTopictreeTestBase):
+    """ Methods to test tree data view """
 
-    def test_stateOfTree(self):
-        view = self.topictree.restrictedTraverse('@@stateoftree')
+    def test_treeData(self):
+        view = self.topictree.restrictedTraverse('@@treedata')
 
         parent = createContentInContainer(self.topictree,
                                          "collective.topictree.topic",
@@ -120,11 +120,11 @@ class TestStateOfTreeView(CollectiveTopictreeTestBase):
                           '"rel" : "default" } } ] ' +\
                         '} ] }'
 
-        StateOfTree = view.__call__()
-        self.assertEqual(StateOfTree,T_Ref)
+        TreeData = view.__call__()
+        self.assertEqual(TreeData,T_Ref)
 
     def test_TopicJSON(self):
-        view = self.topictree.restrictedTraverse('@@stateoftree')
+        view = self.topictree.restrictedTraverse('@@treedata')
 
         parent = createContentInContainer(self.topictree,
                                          "collective.topictree.topic",

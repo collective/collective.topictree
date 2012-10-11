@@ -164,7 +164,7 @@ $("#treeroot")
 			"themes","ui","crrm","json_data","types"//"dnd","contextmenu"
 		],
         "json_data" : {
-                    "ajax" : { "url" : "@@stateoftree" },
+                    "ajax" : { "url" : "@@treedata" },
         },
         "themes" : {
                 "theme" : "default-mod",

@@ -114,11 +114,11 @@ class DeleteTopicView(grok.View):
         """
         return ''
 
-class StateOfTreeView(grok.View):
+class TreeDataView(grok.View):
     """ Return the JSON representation of the entire Topic Tree
     """
     grok.context(ITopicTree)
-    grok.name('stateoftree') 
+    grok.name('treedata') 
     grok.require('zope2.View')
 
     def __call__(self):
