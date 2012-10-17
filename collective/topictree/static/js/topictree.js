@@ -3,7 +3,6 @@ $(document).ready(function() {
 $(function () {
     $("#mmenu input").click(function () {
         var context_node_uid = $('.jstree-clicked').parent().attr('node_uid');
-
         // select the root node if nothing is selected
         if (context_node_uid == undefined) {
             var treeroot = $('[rel="root"] > a');
@@ -32,6 +31,7 @@ $(function () {
 
             // uses crrm plugin rename function
             case "rename":
+
                 var target = $('.jstree-clicked').parent().attr('node_uid');
                 var root_uid = $('#treeroot > ul > li').attr('node_uid');
                 // everything but the root can be renamed.
@@ -41,8 +41,8 @@ $(function () {
                 }
                 else {
                     $('#errorBox')
-                    .html("Tree root cannot be renamed here.")
-                    .addClass("errorbox");
+                        .html("Tree root cannot be renamed here.")
+                        .addClass("errorbox");
                 }
                 break;
 
@@ -59,9 +59,7 @@ $(function () {
                 if ( target != root_uid ) {        
                     $.ajax({
                         url: "@@deletetopic",
-                        data: {
-                            'node_uid': context_node_uid
-                        },
+                        data: {'node_uid': context_node_uid},
                         success: deleteNode,
                         error: displayError,
                         dataType: "json",
@@ -90,8 +88,8 @@ $(function () {
                 }
                 else {
                     $('#errorBox')
-                    .html("Tree root cannot be cut.")
-                    .addClass("errorbox");
+                        .html("Tree root cannot be cut.")
+                        .addClass("errorbox");
                 }
                 break;
 
@@ -117,17 +115,17 @@ $(function () {
 
             case "paste":
                 var paste_uid = $('.jstree-clicked').parent()
-                                .attr('node_uid')
+                    .attr('node_uid')
                 var cut_source_uid = $('[cut_node="set"]').parent()
-                                        .attr('node_uid')
+                    .attr('node_uid')
                 var copy_source_uid = $('[copy_node="set"]').parent()
-                                        .attr('node_uid')
+                    .attr('node_uid')
 
                 if (( cut_source_uid == undefined ) &&
                     ( copy_source_uid == undefined )) {
                     $('#errorBox')
-                    .html("Nothing to paste.")
-                    .addClass("infobox");              
+                        .html("Nothing to paste.")
+                        .addClass("infobox");              
                 }
                 // paste location cannot be same as cut/copy location
                 // if that is the case, paste does nothing.
@@ -148,8 +146,8 @@ $(function () {
                 }
                 else {
                     $('#errorBox')
-                    .html("Paste location same as source.")
-                    .addClass("infobox");              
+                        .html("Paste location same as source.")
+                        .addClass("infobox");              
                 }
                 break;  
         }
@@ -201,14 +199,14 @@ $("#treeroot")
         var edited_title = $('.jstree-clicked').text().trim()
 
         $.ajax({
-                url: "@@edittopic",
-                data: {
-                       'topic_title': edited_title,
-                       'node_uid': node_uid
-                      },
-                error: displayError,
-                dataType: "json",
-                context: this
+            url: "@@edittopic",
+            data: {
+                'topic_title': edited_title,
+                'node_uid': node_uid
+            },
+            error: displayError,
+            dataType: "json",
+            context: this
         });
 
     })
@@ -221,31 +219,27 @@ $("#treeroot")
 function createNode(data) {
     var node_uid = data.node_uid;
     $("#treeroot").bind("create.jstree", function (e, data) {
-        var topic_title = $('[node_uid="' + node_uid + '"] > a')
-                            .text().trim();
+        var topic_title = $('[node_uid="' + node_uid + '"] > a').text().trim();
         $.ajax({
-                url: "@@edittopic",
-                data: {
-                        'topic_title': topic_title,
-                        'node_uid': node_uid
-                },
-                //error: displayError,
-                dataType: "json",
-                context: this
+            url: "@@edittopic",
+            data: {
+                'topic_title': topic_title,
+                'node_uid': node_uid
+            },
+            //error: displayError,
+            dataType: "json",
+            context: this
         });
         // remove binding so this is called only once
         // (not everytime another object is created)
         $(this).unbind("create.jstree");
     })
-    .jstree("create",
-        null,
-        "last", {
-            "attr" : {
-                "rel" : this.id.toString().replace("add_", ""),
-                "node_uid" : node_uid
-            },
+    .jstree("create", null, "last", 
+        {"attr": {
+            "rel" : this.id.toString().replace("add_", ""),
+            "node_uid" : node_uid},
         "data" : "New node" // specify default new text
-    });
+        });
 }
 
 function deleteNode(data) {
@@ -265,7 +259,7 @@ function pasteNode(data) {
 
 function displayError(data) {
     $('#errorBox')
-    .html("An error occurred.")
-    .addClass("errorbox");
+        .html("An error occurred.")
+        .addClass("errorbox");
 }
 
