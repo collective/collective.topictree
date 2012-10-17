@@ -215,6 +215,12 @@ $("#treeroot")
     })
     //this fires after an item is removed from the tree
     .bind("remove.jstree", function (e, data) {
+    })
+
+    .bind("dblclick.jstree", function(e, data) {
+        // data.inst is the tree object, and data.rslt.obj is the node
+        var selected_node = $('.jstree-clicked');
+        $('#treeroot').jstree('toggle_node', selected_node);
     });
 
 });
@@ -265,4 +271,3 @@ function displayError(data) {
         .html("An error occurred.")
         .addClass("errorbox");
 }
-
