@@ -156,6 +156,9 @@ $(function () {
 
 $("#treeroot")
 	.jstree({ 
+        core: {
+            "animation": 100,
+        },
 		// List of active plugins
 		"plugins" : [ 
 			"themes","ui","crrm","json_data","types"//"dnd","contextmenu"
