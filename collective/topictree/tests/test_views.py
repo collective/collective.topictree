@@ -38,11 +38,11 @@ class TestAddTopicView(CollectiveTopictreeTestBase):
 
     def test_addTopic(self):
         view = self.topictree.restrictedTraverse('@@addtopic')
-        AddTopic = view.__call__()
+        AddTopic = view()
         self.assertEqual(AddTopic,'UNDEFINED')
 
         self.request.set('context_node_uid',IUUID(self.topictree))
-        AddTopic = view.__call__()
+        AddTopic = view()
         self.assertEquals(len(self.topictree.getFolderContents()),1)
         created_type = self.topictree.getFolderContents()[0].portal_type       
         self.assertEquals(created_type,'collective.topictree.topic')
@@ -52,7 +52,7 @@ class TestEditTopicView(CollectiveTopictreeTestBase):
 
     def test_editTopic(self):
         view = self.topictree.restrictedTraverse('@@edittopic')
-        EditTopic = view.__call__()
+        EditTopic = view()
         self.assertEqual(EditTopic,'UNDEFINED')
 
         topic = createContentInContainer(self.topictree,
@@ -104,60 +104,43 @@ class TestTreeDataView(CollectiveTopictreeTestBase):
         notify(ObjectModifiedEvent(child1))
         notify(ObjectModifiedEvent(child2))
 
-        T_Ref = '{ "data" : "", ' +\
-                  '"attr" : ' +\
-                    '{ "node_uid" : "' + IUUID(self.topictree) +'", ' +\
-                      '"rel" : "root" }, ' +\
-                      '"children" : [ { "data" : "Parent", ' +\
-                        '"attr" : { "node_uid" : "' + IUUID(parent) + '", ' +\
-                        '"rel" : "default" }, ' +\
-                        '"children" : ' +\
-                          '[ { "data" : "Child1", ' +\
-                          '"attr" : { "node_uid" : "' + IUUID(child1) + '", ' +\
-                          '"rel" : "default" } }, ' +\
-                            '{ "data" : "Child2", ' +\
-                          '"attr" : { "node_uid" : "' + IUUID(child2) + '", ' +\
-                          '"rel" : "default" } } ] ' +\
-                        '} ] }'
+        treedata = {
+            "data": "",
+            "attr": {
+                "node_uid": IUUID(self.topictree), "id": IUUID(self.topictree)
+                },
+            "rel": "root",
+            "children": [
+                {
+                "data": parent.title,
+                "attr": {
+                    "node_uid": IUUID(parent),
+                    "id": IUUID(parent)},
+                "rel": "default",
+                "children": [
+                    {
+                    "data": child1.title,
+                    "attr": {
+                        "node_uid": IUUID(child1),
+                        "id": IUUID(child1)},
+                    "rel": "default",
+                    "children": []
+                    },
+                    {
+                    "data": child2.title,
+                    "attr": {
+                        "node_uid": IUUID(child2),
+                        "id": IUUID(child2)},
+                    "rel": "default",
+                    "children": []
+                    },
+                    ],
+                }
+            ]
+        }
 
-        TreeData = view.__call__()
-        self.assertEqual(TreeData,T_Ref)
+        self.assertEqual(json.loads(view()), treedata)
 
-    def test_TopicJSON(self):
-        view = self.topictree.restrictedTraverse('@@treedata')
-
-        parent = createContentInContainer(self.topictree,
-                                         "collective.topictree.topic",
-                                         title='Parent')
-        child1 = createContentInContainer(parent,
-                                         "collective.topictree.topic",
-                                         title='Child1')
-        child2 = createContentInContainer(parent,
-                                         "collective.topictree.topic",
-                                         title='Child2')
-
-        notify(ObjectModifiedEvent(parent))
-        notify(ObjectModifiedEvent(child1))
-        notify(ObjectModifiedEvent(child2))
-
-        T_Ref = '{ "data" : "", ' +\
-                  '"attr" : ' +\
-                    '{ "node_uid" : "' + IUUID(self.topictree) +'", ' +\
-                      '"rel" : "root" }, ' +\
-                      '"children" : [ { "data" : "Parent", ' +\
-                        '"attr" : { "node_uid" : "' + IUUID(parent) + '", ' +\
-                        '"rel" : "default" }, ' +\
-                        '"children" : ' +\
-                          '[ { "data" : "Child1", ' +\
-                          '"attr" : { "node_uid" : "' + IUUID(child1) + '", ' +\
-                          '"rel" : "default" } }, ' +\
-                            '{ "data" : "Child2", ' +\
-                          '"attr" : { "node_uid" : "' + IUUID(child2) + '", ' +\
-                          '"rel" : "default" } } ] ' +\
-                        '} ] }'
-
-        TopicJSON = view.TopicJSON(IUUID(self.topictree))
-        self.assertEqual(TopicJSON,T_Ref)
 
 class TestPasteTopicView(CollectiveTopictreeTestBase):
     """ Methods to test paste topic tree view """
@@ -166,7 +149,7 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
         view = self.topictree.restrictedTraverse('@@pastetopic')
 
         # no cut, no copy scenario
-        PasteTopic = view.__call__()
+        PasteTopic = view()
         self.assertEqual(PasteTopic,None)
 
         # cut/paste scenario
@@ -191,9 +174,10 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
 
         transaction.savepoint(optimistic=True)
 
-        self.request.set('cut_source_uid',IUUID(child1_2))
-        self.request.set('paste_uid',IUUID(child2))
-        PasteTopic = view.__call__()
+        self.request.set('source_uid',IUUID(child1_2))
+        self.request.set('target_uid',IUUID(child2))
+        self.request.set('is_copy', False)
+        PasteTopic = view()
         # child1_2 moved inside child2
         self.assertEqual(child2.getFolderContents()[0].UID,IUUID(child1_2))
         # child1 should now not contain any children
@@ -203,7 +187,7 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
         self.topictree.manage_delObjects([parent.getId()])
         self.assertEquals(len(self.topictree.getFolderContents()),0)
         #clear the request variable
-        self.request.set('cut_source_uid','')
+        self.request.set('source_uid','')
 
         # copy/paste scenario
         parent = createContentInContainer(self.topictree,
@@ -225,9 +209,10 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
         notify(ObjectModifiedEvent(child2))
         notify(ObjectModifiedEvent(child1_2))
 
-        self.request.set('copy_source_uid',IUUID(child1_2))
-        self.request.set('paste_uid',IUUID(child2))
-        PasteTopic = view.__call__()
+        self.request.set('source_uid', IUUID(child1_2))
+        self.request.set('target_uid', IUUID(child2))
+        self.request.set('is_copy', True)
+        PasteTopic = view()
         # child1_2 copied inside child2
         # child1 should still contain child1_2
         self.assertEqual(child1.getFolderContents()[0].UID,IUUID(child1_2))
