@@ -12,4 +12,7 @@ class ITopicTree(form.Schema):
         title = _(u'label_title', default=u'Title'),
         required = True
         )
-        
+
+class View(grok.View):
+    grok.context(ITopicTree)
+    grok.require('zope2.View')
