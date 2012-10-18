@@ -7,7 +7,7 @@ $(function() {
     }
 
     $(".topictree").jstree({ 
-        core: {
+        "core": {
             "animation": 100,
         },
 		// List of active plugins
