@@ -14,7 +14,7 @@
 	    <div class="portalMessage" tal:condition="view/status" tal:content="view/status">
         </div>
 
-        <h1> Edit Topic Tree </h1>
+        <h1 tal:content="context/title">Topic Tree</h1>
 
 	    <div id="errorBox"></div>
 
