@@ -1,3 +1,50 @@
+#content .jstree ul {
+    margin: 0;
+}
+
+#content .jstree {
+    background: transparent;
+}
+
+#content .jstree a:hover {
+    color: black !important;
+}
+
+#content .jstree a:link {
+    padding: 0.3em 0.5em;    
+    border: 1px solid #FFF;
+    margin: 2px;
+}
+
+#content .jstree a:hover {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    filter: none;
+    background-color:#eee;
+    background-image:-webkit-gradient(linear,0 0,0 100%,from(#fafafa),to(#eee));
+    background-image:-moz-linear-gradient(top,#fafafa,#eee);
+    background-image:-o-linear-gradient(top,#fafafa,#eee);
+    border-color:#999;
+    color:#222;
+    text-shadow:0 1px 0 #f2f2f2
+}
+
+#content .jstree a.jstree-clicked:link {
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    filter: none;
+    background-color:#ddd;
+    background-image:-webkit-gradient(linear,0 0,0 100%,from(#eee),to(#ddd));
+    background-image:-moz-linear-gradient(top,#eee,#ddd);
+    background-image:-o-linear-gradient(top,#eee,#ddd);
+    border-color:#999;
+    color:#222;
+    text-shadow:0 1px 0 #f2f2f2
+}
+
+
 .icons-on .contenttype-collective\.topictree\.topictree,
 .icons-on .contenttype-collective\.topictree\.topic {
     background: url("++resource++collective.topictree/topic-icon.png") no-repeat 0 8px;
