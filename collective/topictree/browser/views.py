@@ -123,16 +123,14 @@ class TreeDataView(grok.View):
     grok.require('zope2.View')
 
     def __call__(self):
-        # get the JSON representation of the topic tree
-        # call TopicJSON on root
-        return self.TopicJSON(IUUID(self.context))
+        return json.dumps(self.data(IUUID(self.context)))
 
     def render(self):
         """ No-op to keep grok.View happy
         """
         return ''
 
-    def TopicJSON(self,node_uid):
+    def data(self, node_uid):
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(UID=node_uid)
         contents = brains[0].getObject().getFolderContents()
@@ -144,30 +142,18 @@ class TreeDataView(grok.View):
         else:
             node_rel = 'default'        
 
-        Json_string = ''
+        data = {
+            'data': node_name,
+            'attr': {'node_uid': node_uid, 'id': node_uid},
+            'rel': node_rel,
+            'children': [],
+        }
 
-        if len(contents) == 0: 
-            # Tree leaf
-            Json_string = '{ "data" : "' + node_name +\
-                          '", "attr" : { "node_uid" : "' + node_uid +\
-                          '", "rel" : "' + node_rel + '" } }'
-        else:
-            # Non Tree leaf
-            Json_string = '{ "data" : "' + node_name +\
-                          '", "attr" : { "node_uid" : "' + node_uid +\
-                          '", "rel" : "' + node_rel +\
-                          '" }, "children" : [ '
+        for brain in contents:
+            data['children'].append(self.data(brain.UID))
 
-            for brain in contents:
-                    brain_uid = brain.UID                
-                    Json_string = Json_string + self.TopicJSON(brain_uid) + ', '
+        return data
 
-            # remove last 2 characters ", " (not needed after last child)
-            Json_string = Json_string[:-2]
-            # add closing brackets
-            Json_string = Json_string + ' ] }'
-
-        return Json_string
 
 class PasteTopicView(grok.View):
     """ Paste a Topic (and its children) into a new place in the tree
@@ -183,9 +169,11 @@ class PasteTopicView(grok.View):
 
         source_uid = request.get('source_uid')
         target_uid = request.get('target_uid')
-        is_copy = request.get('is_copy')
+        is_copy = request.get('is_copy') == True
 
         brains = catalog(UID=source_uid)
+        if not brains:
+            return
         obj = brains[0].getObject()
         if is_copy:
             cp = obj.aq_parent.manage_copyObjects(obj.getId())
