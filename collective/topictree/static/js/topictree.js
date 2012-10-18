@@ -27,13 +27,9 @@ $(function() {
             // This will prevent moving or creating any other type as a rootnode
             "valid_children" : [ "root" ],
             "types" : {
-                "topic" : {
-                    // can have topics inside, but NOT root nodes
-                    "valid_children" : [ "topic" ],
-                },
                 "root" : {
                     // can have topics inside, but NOT other root nodes
-                    "valid_children" : [ "topic" ],
+                    "valid_children" : [ "default" ],
                     // those prevent the functions with the same name to be used
                     // on root nodes internally the `before` event is used
                     "start_drag" : false,
