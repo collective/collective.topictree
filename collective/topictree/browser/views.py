@@ -27,7 +27,8 @@ class AddTopicView(grok.View):
         request = self.request
         context = self.context
 
-        context_node_uid = request.get('context_node_uid', '')
+        context_node_uid = request.get('context_node_uid')
+        title = request.get('title')
         if not context_node_uid:
             return 'UNDEFINED'
 
@@ -38,7 +39,7 @@ class AddTopicView(grok.View):
         obj = brains[0].getObject()        
         topic = createContentInContainer(obj,
                                          "collective.topictree.topic",
-                                         title='New Topic') 
+                                         title=title) 
         result = 'success'
         return json.dumps({ 'result'   : result,
                             'node_uid' : IUUID(topic) })
@@ -180,39 +181,23 @@ class PasteTopicView(grok.View):
         context = self.context
         catalog = getToolByName(context, 'portal_catalog')
 
-        paste_uid = request.get('paste_uid', '')
-        cut_source_uid = request.get('cut_source_uid', '')
-        copy_source_uid = request.get('copy_source_uid', '')
+        source_uid = request.get('source_uid')
+        target_uid = request.get('target_uid')
+        is_copy = request.get('is_copy')
 
-        # if cut or copy have not been clicked yet  - return
-        if cut_source_uid == '' and copy_source_uid == '':
-            return 
+        brains = catalog(UID=source_uid)
+        obj = brains[0].getObject()
+        if is_copy:
+            cp = obj.aq_parent.manage_copyObjects(obj.getId())
+        else:
+            cp = obj.aq_parent.manage_cutObjects(obj.getId())
 
-        # client makes sure that only cut or copy are pressed at any given time.
-        # if cut node_uid has valid uid - cut was pressed
-        if cut_source_uid != '':
-            brains = catalog(UID=cut_source_uid)
-            obj = brains[0].getObject()
-            source_folder = obj.aq_parent
-            obj_id = brains[0].id
-            # cut
-            cp = source_folder.manage_cutObjects(obj_id)
-
-        # if copy node_uid has valid uid - copy was pressed
-        if copy_source_uid != '':
-            brains = catalog(UID=copy_source_uid)
-            obj = brains[0].getObject()
-            source_folder = obj.aq_parent
-            obj_id = brains[0].id
-            # copy
-            cp = source_folder.manage_copyObjects(obj_id)
-
-        # get the paste
-        brains2 = catalog(UID=paste_uid)
-        paste_folder = brains2[0].getObject()
+        # get the target folder
+        brains = catalog(UID=target_uid)
+        target = brains[0].getObject()
 
         # paste
-        paste_folder.manage_pasteObjects(cp)
+        target.manage_pasteObjects(cp)
    
         result = 'success'
         return json.dumps({ 'result' : result})
