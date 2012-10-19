@@ -94,6 +94,7 @@ $(function() {
         data.rslt.o.each(function (i) {
             var source_uid = $(this).attr('node_uid');
             var target_uid = $(data.rslt.r).attr('node_uid');
+            console.log(data.rslt.cy);
             $.ajax({
                 async : false,
                 url: "@@pastetopic",

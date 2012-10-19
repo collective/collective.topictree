@@ -75,30 +75,22 @@ class DeleteTopicView(grok.View):
     grok.require('zope2.View')
 
     def __call__(self):
-        request = self.request
-        context = self.context
-        node_uid = request.get('node_uid', '')
-        if not node_uid:
-            return 'UNDEFINED'
+        node_uid = self.request['node_uid']
     
         # find the node object
-        catalog = getToolByName(context, 'portal_catalog')
-        brains = catalog(
-                 portal_type='collective.topictree.topic',
-                 UID=node_uid)
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brains = catalog(portal_type='collective.topictree.topic', UID=node_uid)
         obj = brains[0].getObject()
 
         # delete the object
         parent = obj.aq_parent
-        parent.manage_delObjects([obj.getId()])
-
-        result = 'success'
-        return json.dumps({ 'result' : result})
+        parent.manage_delObjects(obj.getId())
 
     def render(self):
         """ No-op to keep grok.View happy
         """
         return ''
+
 
 class TreeDataView(grok.View):
     """ Return the JSON representation of the entire Topic Tree
@@ -152,9 +144,9 @@ class PasteTopicView(grok.View):
         context = self.context
         catalog = getToolByName(context, 'portal_catalog')
 
-        source_uid = request.get('source_uid')
-        target_uid = request.get('target_uid')
-        is_copy = request.get('is_copy') == True
+        source_uid = request['source_uid']
+        target_uid = request['target_uid']
+        is_copy = request['is_copy'] == 'true'
 
         brains = catalog(UID=source_uid)
         if not brains:
@@ -172,9 +164,6 @@ class PasteTopicView(grok.View):
         # paste
         target.manage_pasteObjects(cp)
    
-        result = 'success'
-        return json.dumps({ 'result' : result})
-
     def render(self):
         """ No-op to keep grok.View happy
         """

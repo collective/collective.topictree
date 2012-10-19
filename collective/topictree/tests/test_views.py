@@ -61,7 +61,7 @@ class TestEditTopicView(CollectiveTopictreeTestBase):
 
         notify(ObjectModifiedEvent(topic))
 
-        self.request.set('node_uid',IUUID(topic))
+        self.request.set('node_uid', IUUID(topic))
         self.request.set('topic_title', 'Renamed Title')
         edittopic()
         self.assertEqual(topic.title, 'Renamed Title')
@@ -69,20 +69,20 @@ class TestEditTopicView(CollectiveTopictreeTestBase):
 class TestDeleteTopicView(CollectiveTopictreeTestBase):
     """ Methods to test delete topic tree view """
 
-    def test_deleteTopic(self):
-        view = self.topictree.restrictedTraverse('@@deletetopic')
-        DeleteTopic = view.__call__()
-        self.assertEqual(DeleteTopic,'UNDEFINED')
+    def test_view(self):
+        deltopic = self.topictree.restrictedTraverse('@@deletetopic')
+        self.assertRaises(KeyError, deltopic)
 
         topic = createContentInContainer(self.topictree,
                                          "collective.topictree.topic",
                                          title='NewTopic') 
 
         notify(ObjectModifiedEvent(topic))
-        self.request.set('node_uid',IUUID(topic))
-        self.assertEqual(self.topictree.getFolderContents()[0].Title,'NewTopic')
-        DeleteTopic = view.__call__()
-        self.assertEqual(len(self.topictree.getFolderContents()),0)
+        self.request.set('node_uid', IUUID(topic))
+        self.assertEqual(self.topictree.getFolderContents()[0].Title,
+                         'NewTopic')
+        deltopic()
+        self.assertEqual(len(self.topictree.getFolderContents()), 0)
 
 class TestTreeDataView(CollectiveTopictreeTestBase):
     """ Methods to test tree data view """
@@ -146,26 +146,22 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
     """ Methods to test paste topic tree view """
 
     def test_pasteTopic(self):
-        view = self.topictree.restrictedTraverse('@@pastetopic')
-
-        # no cut, no copy scenario
-        PasteTopic = view()
-        self.assertEqual(PasteTopic,None)
+        pastetopic = self.topictree.restrictedTraverse('@@pastetopic')
+        self.assertRaises(KeyError, pastetopic)
 
         # cut/paste scenario
         parent = createContentInContainer(self.topictree,
-                                         "collective.topictree.topic",
-                                         title='Parent')
+                                          "collective.topictree.topic",
+                                          title='Parent')
         child1 = createContentInContainer(parent,
-                                         "collective.topictree.topic",
-                                         title='Child1')
+                                          "collective.topictree.topic",
+                                          title='Child1')
         child2 = createContentInContainer(parent,
-                                         "collective.topictree.topic",
-                                         title='Child2')
-
+                                          "collective.topictree.topic",
+                                          title='Child2')
         child1_2 = createContentInContainer(child1,
-                                         "collective.topictree.topic",
-                                         title='Child1_2')
+                                            "collective.topictree.topic",
+                                            title='Child1_2')
 
         notify(ObjectModifiedEvent(parent))
         notify(ObjectModifiedEvent(child1))
@@ -176,34 +172,32 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
 
         self.request.set('source_uid',IUUID(child1_2))
         self.request.set('target_uid',IUUID(child2))
-        self.request.set('is_copy', False)
-        PasteTopic = view()
+        self.request.set('is_copy', 'false')
+        pastetopic()
         # child1_2 moved inside child2
-        self.assertEqual(child2.getFolderContents()[0].UID,IUUID(child1_2))
+        self.assertEqual(child2.getFolderContents()[0].UID, IUUID(child1_2))
         # child1 should now not contain any children
-        self.assertEqual(len(child1.getFolderContents()),0)
+        self.assertEqual(len(child1.getFolderContents()), 0)
 
-        #delete the tree except for root (to clear for next test)
+        # delete the tree except for root (to clear for next test)
         self.topictree.manage_delObjects([parent.getId()])
-        self.assertEquals(len(self.topictree.getFolderContents()),0)
-        #clear the request variable
-        self.request.set('source_uid','')
+        self.assertEquals(len(self.topictree.getFolderContents()), 0)
+        # clear the request variable
+        self.request.set('source_uid', '')
 
         # copy/paste scenario
         parent = createContentInContainer(self.topictree,
-                                         "collective.topictree.topic",
-                                         title='Parent')
+                                          "collective.topictree.topic",
+                                          title='Parent')
         child1 = createContentInContainer(parent,
-                                         "collective.topictree.topic",
-                                         title='Child1')
+                                          "collective.topictree.topic",
+                                          title='Child1')
         child2 = createContentInContainer(parent,
-                                         "collective.topictree.topic",
-                                         title='Child2')
-
+                                          "collective.topictree.topic",
+                                          title='Child2')
         child1_2 = createContentInContainer(child1,
-                                         "collective.topictree.topic",
-                                         title='Child1_2')
-
+                                            "collective.topictree.topic",
+                                            title='Child1_2')
         notify(ObjectModifiedEvent(parent))
         notify(ObjectModifiedEvent(child1))
         notify(ObjectModifiedEvent(child2))
@@ -211,13 +205,13 @@ class TestPasteTopicView(CollectiveTopictreeTestBase):
 
         self.request.set('source_uid', IUUID(child1_2))
         self.request.set('target_uid', IUUID(child2))
-        self.request.set('is_copy', True)
-        PasteTopic = view()
+        self.request.set('is_copy', 'true')
+        pastetopic()
         # child1_2 copied inside child2
         # child1 should still contain child1_2
-        self.assertEqual(child1.getFolderContents()[0].UID,IUUID(child1_2))
+        self.assertEqual(child1.getFolderContents()[0].UID, IUUID(child1_2))
         # child1_2 and its copy should match titles
-        self.assertEqual(child1_2.Title(),child2.getFolderContents()[0].Title)
+        self.assertEqual(child1_2.Title(), child2.getFolderContents()[0].Title)
         # child1_2 and its copy should NOT match UIDs
-        self.assertNotEqual(IUUID(child1_2),child2.getFolderContents()[0].UID)
+        self.assertNotEqual(IUUID(child1_2), child2.getFolderContents()[0].UID)
 
