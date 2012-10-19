@@ -36,7 +36,7 @@ class TestContentTypes(unittest.TestCase):
 class TestAddTopicView(CollectiveTopictreeTestBase):
     """ Methods to test add topic tree view """
 
-    def test_addTopic(self):
+    def test_view(self):
         addtopic = self.topictree.restrictedTraverse('@@addtopic')
         self.assertRaises(KeyError, addtopic)
 
@@ -51,10 +51,9 @@ class TestAddTopicView(CollectiveTopictreeTestBase):
 class TestEditTopicView(CollectiveTopictreeTestBase):
     """ Methods to test edit topic tree view """
 
-    def test_editTopic(self):
-        view = self.topictree.restrictedTraverse('@@edittopic')
-        EditTopic = view()
-        self.assertEqual(EditTopic,'UNDEFINED')
+    def test_view(self):
+        edittopic = self.topictree.restrictedTraverse('@@edittopic')
+        self.assertRaises(KeyError, edittopic)
 
         topic = createContentInContainer(self.topictree,
                                          "collective.topictree.topic",
@@ -63,9 +62,9 @@ class TestEditTopicView(CollectiveTopictreeTestBase):
         notify(ObjectModifiedEvent(topic))
 
         self.request.set('node_uid',IUUID(topic))
-        self.request.set('topic_title','Renamed Topic')
-        EditTopic = view.__call__()
-        self.assertEqual(topic.title,'Renamed Topic')
+        self.request.set('topic_title', 'Renamed Title')
+        edittopic()
+        self.assertEqual(topic.title, 'Renamed Title')
 
 class TestDeleteTopicView(CollectiveTopictreeTestBase):
     """ Methods to test delete topic tree view """

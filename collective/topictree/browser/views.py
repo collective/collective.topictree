@@ -40,6 +40,7 @@ class AddTopicView(grok.View):
         """
         return ''
 
+
 class EditTopicView(grok.View):
     """ Edit Topic on the topic tree
     """
@@ -48,30 +49,23 @@ class EditTopicView(grok.View):
     grok.require('zope2.View')
 
     def __call__(self):
-        request = self.request
-        context = self.context
-        topic_title = request.get('topic_title', '')
-        node_uid = request.get('node_uid', '')
-        if not topic_title and not node_uid:
-            return 'UNDEFINED'
+        topic_title = self.request['topic_title']
+        node_uid = self.request['node_uid']
    
         # find the node object
-        catalog = getToolByName(context, 'portal_catalog')
-        brains = catalog(portal_type='collective.topictree.topic',
-                         UID=node_uid)
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brains = catalog(portal_type='collective.topictree.topic', UID=node_uid)
         obj = brains[0].getObject()
 
         # set the new title
         obj.title = topic_title
         notify(ObjectModifiedEvent(obj))
 
-        result = 'success'
-        return json.dumps({ 'result' : result})
-
     def render(self):
         """ No-op to keep grok.View happy
         """
         return ''
+
 
 class DeleteTopicView(grok.View):
     """ Delete Topic from the topic tree
