@@ -23,19 +23,15 @@ class AddTopicView(grok.View):
     grok.require('zope2.View')
 
     def __call__(self):
-        request = self.request
-        context = self.context
-
-        context_uid = request['context_uid']
-        title = request['title']
+        context_uid = self.request['context_uid']
+        title = self.request['title']
 
         # find the context object
-        catalog = getToolByName(context, 'portal_catalog')
+        catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(UID=context_uid)
 
         obj = brains[0].getObject()        
-        topic = createContentInContainer(obj,
-                                         "collective.topictree.topic",
+        topic = createContentInContainer(obj, "collective.topictree.topic",
                                          title=title) 
         return json.dumps({'node_uid': IUUID(topic)})
 
