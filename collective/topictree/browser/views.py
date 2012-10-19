@@ -2,7 +2,6 @@ import json
 
 from five import grok
 
-from zope.interface import Interface
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -27,22 +26,18 @@ class AddTopicView(grok.View):
         request = self.request
         context = self.context
 
-        context_node_uid = request.get('context_node_uid')
-        title = request.get('title')
-        if not context_node_uid:
-            return 'UNDEFINED'
+        context_uid = request['context_uid']
+        title = request['title']
 
         # find the context object
         catalog = getToolByName(context, 'portal_catalog')
-        brains = catalog(UID=context_node_uid)
+        brains = catalog(UID=context_uid)
 
         obj = brains[0].getObject()        
         topic = createContentInContainer(obj,
                                          "collective.topictree.topic",
                                          title=title) 
-        result = 'success'
-        return json.dumps({ 'result'   : result,
-                            'node_uid' : IUUID(topic) })
+        return json.dumps({'node_uid': IUUID(topic)})
 
     def render(self):
         """ No-op to keep grok.View happy

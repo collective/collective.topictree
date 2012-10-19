@@ -49,7 +49,7 @@ $(function() {
         $.ajax({
             url: "@@addtopic",
             data: {
-                'context_node_uid': node_uid,
+                'context_uid': node_uid,
                 'title': data.rslt.name
             },
             success: function(r) {

@@ -37,15 +37,16 @@ class TestAddTopicView(CollectiveTopictreeTestBase):
     """ Methods to test add topic tree view """
 
     def test_addTopic(self):
-        view = self.topictree.restrictedTraverse('@@addtopic')
-        AddTopic = view()
-        self.assertEqual(AddTopic,'UNDEFINED')
+        addtopic = self.topictree.restrictedTraverse('@@addtopic')
+        self.assertRaises(KeyError, addtopic)
 
-        self.request.set('context_node_uid',IUUID(self.topictree))
-        AddTopic = view()
-        self.assertEquals(len(self.topictree.getFolderContents()),1)
-        created_type = self.topictree.getFolderContents()[0].portal_type       
-        self.assertEquals(created_type,'collective.topictree.topic')
+        self.request.set('context_uid', IUUID(self.topictree))
+        self.request.set('title', 'New Topic')
+        addtopic()
+        self.assertEquals(len(self.topictree.getFolderContents()), 1)
+        topic = self.topictree.getFolderContents()[0].getObject()
+        self.assertTrue(ITopic.providedBy(topic))
+        self.assertEquals(topic.title, 'New Topic')
        
 class TestEditTopicView(CollectiveTopictreeTestBase):
     """ Methods to test edit topic tree view """
