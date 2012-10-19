@@ -2,12 +2,9 @@ import unittest2 as unittest
 
 from zope.component import createObject
 
-from Products.CMFCore.utils import getToolByName
-
 from collective.topictree.topictree import ITopicTree
 from collective.topictree.topic import ITopic
 
-from base import PROJECTNAME
 from base import INTEGRATION_TESTING
 
 class TestContentTypes(unittest.TestCase):

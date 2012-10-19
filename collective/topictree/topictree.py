@@ -1,6 +1,6 @@
 from zope import schema
 from five import grok
-from plone.directives import dexterity, form
+from plone.directives import form
 
 from collective.topictree import MessageFactory as _
 

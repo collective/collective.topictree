@@ -1,21 +1,14 @@
 import json
 import transaction
-import unittest2 as unittest
 
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
-from zope.component import createObject
 
 from plone.uuid.interfaces import IUUID
 from plone.dexterity.utils import createContentInContainer
 
-from Products.CMFCore.utils import getToolByName
-
-from collective.topictree.topictree import ITopicTree
 from collective.topictree.topic import ITopic
 
-from base import PROJECTNAME
-from base import INTEGRATION_TESTING
 from base import CollectiveTopictreeTestBase
 
 class TestAddTopicView(CollectiveTopictreeTestBase):

@@ -5,7 +5,6 @@ from five import grok
 from zope.event import notify
 from zope.lifecycleevent import ObjectModifiedEvent
 
-from collective.topictree import MessageFactory as _
 from collective.topictree.topictree import ITopicTree
 
 from plone.uuid.interfaces import IUUID

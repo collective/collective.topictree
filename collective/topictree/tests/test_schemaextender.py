@@ -1,12 +1,8 @@
 import unittest2 as unittest
 
-from zope.interface import alsoProvides 
-from zope.component import queryMultiAdapter
-
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 
-from base import PROJECTNAME
 from base import INTEGRATION_TESTING
 
 class TestSchemaExtender(unittest.TestCase):
