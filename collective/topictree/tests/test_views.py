@@ -18,21 +18,6 @@ from base import PROJECTNAME
 from base import INTEGRATION_TESTING
 from base import CollectiveTopictreeTestBase
 
-class TestContentTypes(unittest.TestCase):
-    """ Test content types """
-    layer = INTEGRATION_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-
-    def test_topictree(self):
-        tree = createObject('collective.topictree.topictree', id='tree')
-        self.assertTrue(ITopicTree.providedBy(tree))
-
-    def test_topic(self):
-        topic = createObject('collective.topictree.topic', id='topic')
-        self.assertTrue(ITopic.providedBy(topic))
-
 class TestAddTopicView(CollectiveTopictreeTestBase):
     """ Methods to test add topic tree view """
 
