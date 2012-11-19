@@ -3,7 +3,7 @@ from zope.interface import alsoProvides
 from plone.directives import form
 from plone.autoform.interfaces import IFormFieldProvider
 from plone.formwidget.contenttree import ObjPathSourceBinder
-from z3c.relationfield.schema import RelationChoice
+from z3c.relationfield.schema import RelationChoice, RelationList
 
 from collective.topictree import MessageFactory as _
 
@@ -12,11 +12,16 @@ class ITopicTags(form.Schema):
         tree.
     """
 
-    topics = RelationChoice(
-        title=_(u'label_topics', default=u'Topics'),
-        source=ObjPathSourceBinder(
-          object_provides='collective.topictree.topic.ITopic'),
+    topics = RelationList(
+        title=u"Topics",
+        default=[],
+        value_type=RelationChoice(title=_(u"Related"),
+                                  source=ObjPathSourceBinder(
+                                  object_provides=
+                                      'collective.topictree.topic.ITopic')
+                                  ),
         required=False,
     )
 
 alsoProvides(ITopicTags, IFormFieldProvider)
+
