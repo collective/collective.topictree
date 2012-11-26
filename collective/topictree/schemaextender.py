@@ -32,8 +32,13 @@ class TopicTagsExtender(object):
     def getOrder(self, schematas):
         """ Put topics field below subject
         """
-        schematas["categorization"] = ['subject', 'topics', 'relatedItems', 
-                                       'location', 'language']
+        schemata = schematas["categorization"]
+        # make sure both fields are in the schemata before reordering
+        if 'subject' in schemata and 'topics' in schemata:
+            subject_pos = schemata.index('subject')
+            schemata.remove('topics')
+            schemata.insert(subject_pos + 1, 'topics')
+        schematas["categorization"] = schemata
         return schematas
 
     def getFields(self):
