@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2013-01-02 17:05+0000\n"
+"PO-Revision-Date: 2013-01-02 19:10+0200\n"
+"Last-Translator: witek\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: af\n"
+"Language-Name: Afrikaans\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.topictree\n"
+
+#: ./profiles/default/types/collective.topictree.topic.xml
+msgid "A topic in a topic tree"
+msgstr "'n Onderwerp in 'n onderwerp boom"
+
+#: ./profiles/default/types/collective.topictree.topictree.xml
+msgid "A topic tree used for
+    tagging content with topics"
+msgstr "'n Onderwerp boom gebruik vir"
+
+#: ./behavior.py:18
+msgid "Related"
+msgstr "Verwant"
+
+#: ./profiles/default/types/collective.topictree.topic.xml
+msgid "Topic"
+msgstr "Onderwerp"
+
+#: ./profiles/default/types/collective.topictree.topictree.xml
+msgid "Topic Tree"
+msgstr "Onderwerp Boom"
+
+#. Default: "Title"
+#: ./topic.py:11
+#: ./topictree.py:12
+msgid "label_title"
+msgstr "Titel"
+
