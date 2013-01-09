@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-01-02 17:05+0000\n"
-"PO-Revision-Date: 2013-01-02 19:10+0200\n"
+"POT-Creation-Date: 2013-01-09 10:55+0000\n"
+"PO-Revision-Date: 2013-01-09 12:57+0200\n"
 "Last-Translator: witek\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -19,8 +19,7 @@ msgid "A topic in a topic tree"
 msgstr "'n Onderwerp in 'n onderwerp boom"
 
 #: ./profiles/default/types/collective.topictree.topictree.xml
-msgid "A topic tree used for
-    tagging content with topics"
+msgid "A topic tree used for tagging content with topics"
 msgstr "'n Onderwerp boom gebruik vir"
 
 #: ./behavior.py:18
