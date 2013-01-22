@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-01-09 10:55+0000\n"
+"POT-Creation-Date: 2013-01-22 18:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,8 @@ msgid "A topic in a topic tree"
 msgstr ""
 
 #: ./profiles/default/types/collective.topictree.topictree.xml
-msgid "A topic tree used for tagging content with topics"
+msgid "A topic tree used for
+    tagging content with topics"
 msgstr ""
 
 #: ./behavior.py:18
@@ -35,6 +36,10 @@ msgstr ""
 
 #: ./profiles/default/types/collective.topictree.topictree.xml
 msgid "Topic Tree"
+msgstr ""
+
+#: ./behavior.py:16
+msgid "Topics"
 msgstr ""
 
 #. Default: "Title"

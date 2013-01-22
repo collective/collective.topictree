@@ -13,7 +13,7 @@ class ITopicTags(form.Schema):
     """
 
     topics = RelationList(
-        title=u"Topics",
+        title=_(u"Topics"),
         default=[],
         value_type=RelationChoice(title=_(u"Related"),
                                   source=ObjPathSourceBinder(
