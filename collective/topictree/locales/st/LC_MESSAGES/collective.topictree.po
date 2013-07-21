@@ -1,50 +1,42 @@
-# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
-# SOME DESCRIPTIVE TITLE.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2013-07-21 17:48+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"PO-Revision-Date: 2013-07-21 20:10+0200\n"
+"Last-Translator: witek\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"Language-Code: en\n"
-"Language-Name: English\n"
+"Language-Code: st\n"
+"Language-Name: SeSotho\n"
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: collective.topictree\n"
 
 #: ./profiles/default/types/collective.topictree.topic.xml
 msgid "A topic in a topic tree"
-msgstr ""
-
-#: ./profiles/default/types/collective.topictree.topictree.xml
-msgid "A topic tree used for
-    tagging content with topics"
-msgstr ""
+msgstr "Sehloho mmapeng wa sefate"
 
 #: ./behavior.py:18
 msgid "Related"
-msgstr ""
+msgstr "Tsamaisana"
 
 #: ./profiles/default/types/collective.topictree.topic.xml
 msgid "Topic"
-msgstr ""
+msgstr "Sehlogo"
 
 #: ./profiles/default/types/collective.topictree.topictree.xml
 msgid "Topic Tree"
-msgstr ""
+msgstr "Mmepe wa sehlogo"
 
 #: ./behavior.py:16
 msgid "Topics"
-msgstr ""
+msgstr "Sehlogo"
 
 #. Default: "Title"
 #: ./topic.py:11
 #: ./topictree.py:12
 msgid "label_title"
-msgstr ""
+msgstr "Lebitso"
 
